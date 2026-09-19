@@ -42,4 +42,28 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Indicate that the user signed up through Google.
+     */
+    public function google(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'google_id' => (string) fake()->unique()->numberBetween(100000000000),
+            'avatar' => fake()->imageUrl(),
+            'password' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the user has verified a phone number.
+     */
+    public function phoneVerified(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'country_code' => '+20',
+            'phone' => '1'.fake()->numerify('#########'),
+            'phone_verified_at' => now(),
+        ]);
+    }
 }

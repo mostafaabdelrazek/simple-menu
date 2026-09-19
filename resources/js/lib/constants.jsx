@@ -1,0 +1,66 @@
+export const LOCALES = {
+    ar: 'العربية',
+    en: 'English',
+    fr: 'Français',
+};
+
+export const CURRENCIES = [
+    { code: 'EGP', label: 'Egyptian Pound (EGP)' },
+    { code: 'USD', label: 'US Dollar (USD)' },
+    { code: 'EUR', label: 'Euro (EUR)' },
+    { code: 'SAR', label: 'Saudi Riyal (SAR)' },
+    { code: 'AED', label: 'UAE Dirham (AED)' },
+    { code: 'KWD', label: 'Kuwaiti Dinar (KWD)' },
+    { code: 'QAR', label: 'Qatari Riyal (QAR)' },
+    { code: 'BHD', label: 'Bahraini Dinar (BHD)' },
+    { code: 'OMR', label: 'Omani Rial (OMR)' },
+    { code: 'JOD', label: 'Jordanian Dinar (JOD)' },
+    { code: 'LBP', label: 'Lebanese Pound (LBP)' },
+    { code: 'SYP', label: 'Syrian Pound (SYP)' },
+    { code: 'TND', label: 'Tunisian Dinar (TND)' },
+    { code: 'DZD', label: 'Algerian Dinar (DZD)' },
+    { code: 'MAD', label: 'Moroccan Dirham (MAD)' },
+    { code: 'LYD', label: 'Libyan Dinar (LYD)' },
+];
+
+export const COUNTRY_CODES = [
+    { code: '+20', label: 'Egypt (+20)' },
+    { code: '+966', label: 'Saudi Arabia (+966)' },
+    { code: '+971', label: 'United Arab Emirates (+971)' },
+    { code: '+974', label: 'Qatar (+974)' },
+    { code: '+965', label: 'Kuwait (+965)' },
+    { code: '+973', label: 'Bahrain (+973)' },
+    { code: '+968', label: 'Oman (+968)' },
+    { code: '+962', label: 'Jordan (+962)' },
+    { code: '+961', label: 'Lebanon (+961)' },
+    { code: '+963', label: 'Syria (+963)' },
+    { code: '+216', label: 'Tunisia (+216)' },
+    { code: '+213', label: 'Algeria (+213)' },
+    { code: '+212', label: 'Morocco (+212)' },
+    { code: '+218', label: 'Libya (+218)' },
+    { code: '+1', label: 'United States (+1)' },
+    { code: '+44', label: 'United Kingdom (+44)' },
+    { code: '+33', label: 'France (+33)' },
+    { code: '+49', label: 'Germany (+49)' },
+    { code: '+90', label: 'Turkey (+90)' },
+];
+
+export function withLang(url, lang) {
+    if (!lang) return url;
+    const separator = url.includes('?') ? '&' : '?';
+
+    return `${url}${separator}lang=${lang}`;
+}
+
+export async function copyText(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch {
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        input.remove();
+    }
+}

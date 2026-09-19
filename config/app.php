@@ -82,6 +82,30 @@ return [
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Supported Locales
+    |--------------------------------------------------------------------------
+    |
+    | The locales (languages) an entity may be offered in. Restaurant and menu
+    | languages must be a subset of these values.
+    |
+    */
+
+    'supported_locales' => ['ar', 'en', 'fr'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Demo User
+    |--------------------------------------------------------------------------
+    |
+    | The email of the seeded demo user that the local "demo login" button
+    | signs in as. Only reachable while app.debug is enabled.
+    |
+    */
+
+    'demo_user_email' => env('APP_DEMO_USER_EMAIL', 'demo@simplemenu.test'),
+
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     /*

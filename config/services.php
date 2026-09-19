@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback'),
+    ],
+
+    'otp' => [
+        'driver' => env('OTP_DRIVER', 'log'),
+        'ttl' => (int) env('OTP_TTL', 10),
+        'digits' => (int) env('OTP_DIGITS', 6),
+    ],
+
 ];

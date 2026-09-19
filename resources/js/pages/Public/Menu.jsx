@@ -1,0 +1,257 @@
+import { useEffect, useRef, useState } from 'react';
+import { Head } from '@inertiajs/react';
+import { ArrowUp, UtensilsCrossed } from 'lucide-react';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
+
+function formatPrice(value, currency) {
+    const number = parseFloat(value);
+
+    return `${new Intl.NumberFormat(undefined, { minimumFractionDigits: number % 1 === 0 ? 0 : 2 }).format(
+        number
+    )} ${currency}`;
+}
+
+function discountPercent(price, discountPrice) {
+    const original = parseFloat(price);
+    const discounted = parseFloat(discountPrice);
+
+    if (!Number.isFinite(original) || !Number.isFinite(discounted) || original <= 0 || discounted >= original) {
+        return null;
+    }
+
+    return Math.round((1 - discounted / original) * 100);
+}
+
+export default function Menu({ locale, languages, restaurant, menu }) {
+    const rtl = locale === 'ar';
+    const [showTop, setShowTop] = useState(false);
+    const [active, setActive] = useState(0);
+    const headerRef = useRef(null);
+    const sectionRefs = useRef([]);
+
+    useEffect(() => {
+        let ticking = false;
+
+        function measure() {
+            ticking = false;
+
+            setShowTop(window.scrollY > 640);
+
+            const offset = headerRef.current?.offsetHeight ?? 96;
+
+            let index = 0;
+
+            for (let i = 0; i < sectionRefs.current.length; i++) {
+                const node = sectionRefs.current[i];
+
+                if (node && node.getBoundingClientRect().top - offset - 16 <= 0) {
+                    index = i;
+                } else {
+                    break;
+                }
+            }
+
+            setActive(index);
+        }
+
+        function onScroll() {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(measure);
+            }
+        }
+
+        measure();
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    function scrollTo(index) {
+        const node = sectionRefs.current[index];
+
+        if (!node) return;
+
+        const offset = headerRef.current?.offsetHeight ?? 96;
+
+        window.scrollTo({
+            top: node.getBoundingClientRect().top + window.scrollY - offset - 16,
+            behavior: 'smooth',
+        });
+    }
+
+    return (
+        <div dir={rtl ? 'rtl' : 'ltr'} className="min-h-screen overflow-x-clip bg-stone-950 text-stone-100">
+            <Head title={`${restaurant.name} — Menu`} />
+
+            <div className="border-b border-stone-800/70 bg-stone-950/85 backdrop-blur">
+                <div className="mx-auto max-w-3xl px-4 pb-3 pt-3">
+                    <div className="flex items-center justify-between gap-3">
+                        <a href={restaurant.url} className="flex min-w-0 items-center gap-2.5">
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-stone-950">
+                                <UtensilsCrossed className="h-4 w-4" />
+                            </span>
+                            <span className="truncate font-semibold text-stone-100">{restaurant.name}</span>
+                        </a>
+                        <LanguageSwitcher variant="dark" current={locale} languages={languages} />
+                    </div>
+                </div>
+            </div>
+
+            {menu.categories.length > 1 && (
+                <nav
+                    ref={headerRef}
+                    className="sticky top-0 z-40 overflow-x-auto overflow-y-hidden border-b border-stone-800/70 bg-stone-950/90 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    aria-label="Menu sections"
+                >
+                    <div className="mx-auto max-w-3xl px-4 py-2">
+                        <div className="mx-auto flex w-max gap-2">
+                            {menu.categories.map((category, i) => (
+                                <button
+                                    key={i}
+                                    type="button"
+                                    onClick={() => scrollTo(i)}
+                                    className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium transition ${
+                                        active === i
+                                            ? 'border-amber-500/70 bg-amber-500/10 text-amber-300'
+                                            : 'border-stone-800 bg-stone-900/60 text-stone-400 hover:border-stone-700 hover:text-stone-200'
+                                    }`}
+                                >
+                                    {category.name}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </nav>
+            )}
+
+            <main className="mx-auto max-w-3xl px-4 pb-24 pt-10">
+                <div className="mb-12 text-center">
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-400">Menu</p>
+                    <h1 className="mt-3 font-serif text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                        {menu.name || restaurant.name}
+                    </h1>
+                    <div className="mx-auto mt-4 flex items-center gap-3" aria-hidden="true">
+                        <span className="h-px w-10 bg-gradient-to-r from-transparent to-stone-600" />
+                        <span className="h-1 w-1 rotate-45 bg-amber-500" />
+                        <span className="h-px w-10 bg-gradient-to-r from-stone-600 to-transparent" />
+                    </div>
+                    <p className="mt-4 text-sm text-stone-500">
+                        {locale === 'ar'
+                            ? `جميع الأسعار: ${menu.currency}`
+                            : locale === 'fr'
+                              ? `Tous les prix en ${menu.currency}`
+                              : `All prices in ${menu.currency}`}
+                    </p>
+                </div>
+
+                {menu.categories.length === 0 && (
+                    <div className="rounded-2xl border border-dashed border-stone-800 py-16 text-center text-sm text-stone-500">
+                        This menu has no categories yet.
+                    </div>
+                )}
+
+                <div className="space-y-14">
+                    {menu.categories.map((category, i) => (
+                        <section
+                            key={i}
+                            ref={(node) => {
+                                sectionRefs.current[i] = node;
+                            }}
+                            className="scroll-mt-28"
+                        >
+                            <div className="mb-5 flex items-center gap-3">
+                                <span className="h-px flex-1 bg-gradient-to-r from-transparent to-stone-700/70" />
+                                <h2 className="text-lg font-semibold tracking-wide text-white">{category.name}</h2>
+                                <span className="h-px flex-1 bg-gradient-to-r from-stone-700/70 to-transparent" />
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                {category.items.map((item, j) => {
+                                    const pct = discountPercent(item.price, item.discount_price);
+
+                                    return (
+                                        <article
+                                            key={j}
+                                            className="flex min-w-0 gap-3 overflow-hidden rounded-2xl border border-stone-800 bg-stone-900/60 p-3 transition duration-300 hover:border-amber-400/50 hover:bg-stone-900 hover:shadow-lg hover:shadow-black/40"
+                                        >
+                                            {item.image && (
+                                                <span className="h-24 w-24 shrink-0 overflow-hidden rounded-xl ring-1 ring-white/10">
+                                                    <img
+                                                        src={item.image}
+                                                        alt={item.name}
+                                                        className="h-full w-full max-w-full object-cover transition duration-300 group-hover:scale-105"
+                                                    />
+                                                </span>
+                                            )}
+
+                                            <div className="min-w-0 flex-1">
+                                                {item.discount_price && pct !== null && (
+                                                    <span className="mb-1 inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-emerald-400">
+                                                        −{pct}%
+                                                    </span>
+                                                )}
+
+                                                <div className="flex items-baseline gap-2">
+                                                    <h3 className="min-w-0 truncate font-medium text-stone-100">
+                                                        {item.name}
+                                                    </h3>
+                                                    <span
+                                                        className="h-px min-w-0 flex-1 border-b border-dotted border-stone-700"
+                                                        aria-hidden="true"
+                                                    />
+                                                    {!item.discount_price && (
+                                                        <span className="shrink-0 whitespace-nowrap font-semibold text-amber-300">
+                                                            {formatPrice(item.price, menu.currency)}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {item.description && (
+                                                    <p className="mt-1 break-words line-clamp-2 text-sm text-stone-400">
+                                                        {item.description}
+                                                    </p>
+                                                )}
+
+                                                {item.discount_price && (
+                                                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                                                        <span className="whitespace-nowrap font-semibold text-emerald-400">
+                                                            {formatPrice(item.discount_price, menu.currency)}
+                                                        </span>
+                                                        <span className="whitespace-nowrap text-sm text-stone-500 line-through">
+                                                            {formatPrice(item.price, menu.currency)}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </article>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    ))}
+                </div>
+
+                <footer className="mt-16 border-t border-stone-800/70 pt-6 text-center text-xs text-stone-600">
+                    <a href={restaurant.url} className="font-medium text-stone-400 transition hover:text-amber-300">
+                        Visit {restaurant.name}
+                    </a>
+                    <p className="mt-1">
+                        Powered by <span className="text-stone-500">SimpleMenu</span>
+                    </p>
+                </footer>
+            </main>
+
+            <button
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                aria-label="Back to top"
+                className={`fixed bottom-6 end-6 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-stone-700/70 bg-stone-900/80 text-stone-300 backdrop-blur transition hover:border-amber-400/60 hover:text-amber-300 ${
+                    showTop ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
+                }`}
+            >
+                <ArrowUp className={`h-4 w-4 ${rtl ? 'rotate-180' : ''}`} />
+            </button>
+        </div>
+    );
+}

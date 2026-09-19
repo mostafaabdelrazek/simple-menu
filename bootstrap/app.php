@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsurePhoneIsVerified;
+use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,7 +14,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->web(append: [
+            HandleInertiaRequests::class,
+        ]);
+
+        $middleware->encryptCookies(except: ['simplemenu_lang']);
+
+        $middleware->alias([
+            'ensure.phone.verified' => EnsurePhoneIsVerified::class,
+        ]);
+
+        $middleware->redirectGuestsTo(function (Request $request) {
+            return $request->routeIs('admin.*') ? route('admin.login') : route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
