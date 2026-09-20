@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Otp\LogOtpSender;
 use App\Services\Otp\OtpSender;
 use App\Services\Otp\OtpService;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,32 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerAssetVersionQueryString();
+    }
+
+    /**
+     * Append the configured ASSET_VERSION (?v=x.x.x) to every Vite-built asset.
+     */
+    private function registerAssetVersionQueryString(): void
+    {
+        $version = config('app.asset_version') ?: null;
+
+        if ($version === null) {
+            return;
+        }
+
+        $withVersion = static function (string $url) use ($version): string {
+            if (Vite::isRunningHot()) {
+                return $url;
+            }
+
+            $separator = str_contains($url, '?') ? '&' : '?';
+
+            return $url.$separator.'v='.$version;
+        };
+
+        Vite::useScriptTagAttributes(fn ($src, $url) => ['src' => $withVersion($url)]);
+        Vite::useStyleTagAttributes(fn ($src, $url) => ['href' => $withVersion($url)]);
+        Vite::usePreloadTagAttributes(fn ($src, $url) => ['href' => $withVersion($url)]);
     }
 }

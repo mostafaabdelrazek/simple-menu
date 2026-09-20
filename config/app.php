@@ -56,6 +56,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Asset Version
+    |--------------------------------------------------------------------------
+    |
+    | A version string appended to every Vite-built asset URL (?v=x.x.x). Bump
+    | this value (e.g. in .env) after deploying new compiled assets so that
+    | browsers and proxies are forced to fetch the fresh files instead of a
+    | cached copy.
+    |
+    */
+
+    'asset_version' => env('ASSET_VERSION'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
