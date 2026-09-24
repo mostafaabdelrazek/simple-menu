@@ -31,32 +31,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerAssetVersionQueryString();
+        $this->resolveViteAssetPaths();
     }
 
     /**
-     * Append the configured ASSET_VERSION (?v=x.x.x) to every Vite-built asset.
+     * Resolve every Vite-built asset URL through custom_asset(),
+     * which prefixes /public in production and appends ?v=ASSET_VERSION.
      */
-    private function registerAssetVersionQueryString(): void
+    private function resolveViteAssetPaths(): void
     {
-        $version = config('app.asset_version') ?: null;
-
-        if ($version === null) {
-            return;
-        }
-
-        $withVersion = static function (string $url) use ($version): string {
-            if (Vite::isRunningHot()) {
-                return $url;
-            }
-
-            $separator = str_contains($url, '?') ? '&' : '?';
-
-            return $url.$separator.'v='.$version;
-        };
-
-        Vite::useScriptTagAttributes(fn ($src, $url) => ['src' => $withVersion($url)]);
-        Vite::useStyleTagAttributes(fn ($src, $url) => ['href' => $withVersion($url)]);
-        Vite::usePreloadTagAttributes(fn ($src, $url) => ['href' => $withVersion($url)]);
+        Vite::createAssetPathsUsing(fn (string $path, ?bool $secure = null) => custom_asset($path, $secure));
     }
 }
