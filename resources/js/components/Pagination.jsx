@@ -1,12 +1,18 @@
 import { Link } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
 
 export default function Pagination({ links }) {
+    const { dir, t } = useI18n();
+
     if (!links || links.length <= 3) return null;
 
     const prev = links[0];
     const next = links[links.length - 1];
     const pages = links.slice(1, -1);
+    // JSX only treats capitalised names as components, hence StartIcon.
+    const StartIcon = dir === 'rtl' ? ChevronRight : ChevronLeft;
+    const EndIcon = dir === 'rtl' ? ChevronLeft : ChevronRight;
 
     return (
         <nav className="mt-6 flex items-center gap-1">
@@ -16,8 +22,8 @@ export default function Pagination({ links }) {
                     preserveScroll
                     className="flex items-center gap-1 rounded-md border border-stone-300 px-3 py-1.5 text-sm text-stone-700 hover:bg-white"
                 >
-                    <ChevronLeft className="h-4 w-4" />
-                    Previous
+                    <StartIcon className="h-4 w-4" />
+                    {t('pagination.previous')}
                 </Link>
             )}
 
@@ -54,8 +60,8 @@ export default function Pagination({ links }) {
                     preserveScroll
                     className="flex items-center gap-1 rounded-md border border-stone-300 px-3 py-1.5 text-sm text-stone-700 hover:bg-white"
                 >
-                    Next
-                    <ChevronRight className="h-4 w-4" />
+                    {t('pagination.next')}
+                    <EndIcon className="h-4 w-4" />
                 </Link>
             )}
         </nav>

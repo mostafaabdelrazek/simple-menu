@@ -38,7 +38,12 @@ class PublicMenuController extends Controller
 
         return Inertia::render('Public/Menu', [
             'locale' => $locale,
+            // The menu content falls back to a language it actually has, but the
+            // interface around it follows the visitor's own language so a
+            // French reader never gets a right-to-left French page.
+            'ui_locale' => app()->getLocale(),
             'languages' => $menu->languages,
+            'theme' => $menu->theme(),
             'restaurant' => [
                 'name' => $menu->restaurant->translation($locale)->name,
                 'url' => route('public.restaurant', $menu->restaurant->slug),

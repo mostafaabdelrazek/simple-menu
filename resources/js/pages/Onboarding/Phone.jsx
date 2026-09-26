@@ -2,8 +2,10 @@ import { Head, useForm } from '@inertiajs/react';
 import { ShieldCheck, UtensilsCrossed } from 'lucide-react';
 import { COUNTRY_CODES } from '../../lib/constants';
 import FlashMessage from '../../components/FlashMessage';
+import { useI18n } from '../../lib/i18n';
 
 export default function Phone() {
+    const { dir, t } = useI18n();
     const { data, setData, post, processing, errors } = useForm({
         country_code: '+20',
         phone: '',
@@ -15,8 +17,8 @@ export default function Phone() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-stone-50 px-4 py-8">
-            <Head title="Verify your phone" />
+        <div dir={dir} className="flex min-h-screen items-center justify-center bg-stone-50 px-4 py-8">
+            <Head title={t('onboarding.phone_title')} />
             <div className="w-full max-w-md">
                 <FlashMessage />
 
@@ -24,15 +26,13 @@ export default function Phone() {
                     <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500 text-white">
                         {<UtensilsCrossed className="h-6 w-6" />}
                     </span>
-                    <h1 className="mt-4 text-2xl font-bold text-stone-900">Almost in!</h1>
-                    <p className="mt-1 text-sm text-stone-600">
-                        We'll text you a code to confirm your phone number.
-                    </p>
+                    <h1 className="mt-4 text-2xl font-bold text-stone-900">{t('onboarding.phone_heading')}</h1>
+                    <p className="mt-1 text-sm text-stone-600">{t('onboarding.phone_hint')}</p>
                 </div>
 
                 <form onSubmit={submit} className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
                     <label htmlFor="country_code" className="mb-1 block text-sm font-medium text-stone-700">
-                        Country code
+                        {t('onboarding.country_code')}
                     </label>
                     <select
                         id="country_code"
@@ -48,7 +48,7 @@ export default function Phone() {
                     </select>
 
                     <label htmlFor="phone" className="mb-1 block text-sm font-medium text-stone-700">
-                        Phone number
+                        {t('onboarding.phone_number')}
                     </label>
                     <input
                         id="phone"
@@ -68,13 +68,11 @@ export default function Phone() {
                         className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-3 font-semibold text-white hover:bg-amber-600 disabled:opacity-60"
                     >
                         <ShieldCheck className="h-5 w-5" />
-                        Send verification code
+                        {t('onboarding.send_code')}
                     </button>
                 </form>
 
-                <p className="mt-4 text-center text-xs text-stone-400">
-                    In development the code is shown on the next step and written to the log.
-                </p>
+                <p className="mt-4 text-center text-xs text-stone-400">{t('onboarding.dev_hint')}</p>
             </div>
         </div>
     );

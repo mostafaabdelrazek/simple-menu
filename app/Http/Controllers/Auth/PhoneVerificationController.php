@@ -83,21 +83,21 @@ class PhoneVerificationController extends Controller
             ->first();
 
         if ($verification === null || $verification->isVerified()) {
-            throw ValidationException::withMessages(['code' => __('No active verification code.')]);
+            throw ValidationException::withMessages(['code' => __('flash.code_missing')]);
         }
 
         if ($verification->isLocked()) {
-            throw ValidationException::withMessages(['code' => __('Too many attempts. Please request a new code.')]);
+            throw ValidationException::withMessages(['code' => __('flash.code_attempts')]);
         }
 
         if ($verification->isExpired()) {
-            throw ValidationException::withMessages(['code' => __('This code has expired. Please request a new one.')]);
+            throw ValidationException::withMessages(['code' => __('flash.code_expired')]);
         }
 
         if (! $verification->matches($request->string('code')->toString())) {
             $verification->increment('attempts');
 
-            throw ValidationException::withMessages(['code' => __('The code you entered is incorrect.')]);
+            throw ValidationException::withMessages(['code' => __('flash.code_incorrect')]);
         }
 
         $verification->update(['verified_at' => now()]);
@@ -110,6 +110,6 @@ class PhoneVerificationController extends Controller
 
         session()->forget(['otp.country_code', 'otp.phone', 'otp.dev_code']);
 
-        return redirect()->route('dashboard')->with('success', __('Phone number verified.'));
+        return redirect()->route('dashboard')->with('success', __('flash.phone_verified'));
     }
 }

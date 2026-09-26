@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { UtensilsCrossed } from 'lucide-react';
-import LocaleMenu, { rememberLocale } from './LocaleMenu';
+import LocaleMenu from './LocaleMenu';
+import { rememberLocale } from '../../lib/locale';
 import { LOCALES } from '../../lib/constants';
 
 export default function LandingFooter({ copy, locale, languages }) {

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { encodeQr } from '../lib/qrcode';
+import { qrPathData } from '../lib/qrSvg';
 
 /**
  * Renders a real, scannable QR code as inline SVG.
@@ -12,36 +13,7 @@ import { encodeQr } from '../lib/qrcode';
  */
 export default function QrCode({ value, className = '', quiet = 2, label = 'QR code', innerRef }) {
     const code = useMemo(() => (value ? encodeQr(value) : null), [value]);
-
-    const path = useMemo(() => {
-        if (!code) {
-            return '';
-        }
-
-        let d = '';
-
-        for (let y = 0; y < code.size; y++) {
-            let x = 0;
-
-            while (x < code.size) {
-                if (!code.modules[y][x]) {
-                    x++;
-                    continue;
-                }
-
-                let run = 1;
-
-                while (x + run < code.size && code.modules[y][x + run]) {
-                    run++;
-                }
-
-                d += `M${x + quiet} ${y + quiet}h${run}v1h-${run}z`;
-                x += run;
-            }
-        }
-
-        return d;
-    }, [code, quiet]);
+    const path = useMemo(() => qrPathData(code, quiet), [code, quiet]);
 
     if (!code) {
         return null;

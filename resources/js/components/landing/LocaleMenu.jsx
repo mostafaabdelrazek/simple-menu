@@ -1,5 +1,6 @@
 import { Globe2 } from 'lucide-react';
 import { LOCALES } from '../../lib/constants';
+import { rememberLocale } from '../../lib/locale';
 
 /**
  * Compact language switcher for the landing page.
@@ -52,14 +53,4 @@ export default function LocaleMenu({ locale, languages, label, variant = 'light'
             </div>
         </details>
     );
-}
-
-export function rememberLocale(code) {
-    document.cookie = `simplemenu_lang=${code};path=/;max-age=31536000;samesite=Lax`;
-
-    try {
-        localStorage.setItem('simplemenu_lang', code);
-    } catch {
-        // Storage unavailable; the cookie is enough.
-    }
 }

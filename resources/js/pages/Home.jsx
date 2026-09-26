@@ -20,7 +20,6 @@ export default function Home({ locale = 'en', cta_url: ctaUrl, languages, exampl
     const resolved = LOCALES[locale] ? locale : 'en';
     const copy = landingCopy(resolved);
     const rtl = resolved === 'ar';
-    const url = exampleUrl ?? window.location.origin;
 
     return (
         <div dir={rtl ? 'rtl' : 'ltr'} className="bg-stone-50 font-sans text-stone-900 antialiased">

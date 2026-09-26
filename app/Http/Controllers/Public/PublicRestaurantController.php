@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Menu;
 use App\Models\Restaurant;
 use App\Support\LocaleResolver;
 use Illuminate\Http\Request;
@@ -18,9 +19,20 @@ class PublicRestaurantController extends Controller
         $locale = LocaleResolver::resolve($request, $restaurant->availableLocales());
         $translation = $restaurant->translation($locale);
 
+        $menus = $restaurant->menus()
+            ->with('categories.items')
+            ->get();
+
         return Inertia::render('Public/Restaurant', [
             'locale' => $locale,
+            // Content and interface languages are resolved separately: the copy
+            // below falls back to a language the restaurant has, while the
+            // surrounding interface keeps the direction the visitor asked for.
+            'ui_locale' => app()->getLocale(),
             'languages' => $restaurant->availableLocales(),
+            // The profile page wears the look of the restaurant's first menu,
+            // so the branding a guest sees is the branding they scanned for.
+            'theme' => ($menus->first() ?? new Menu)->theme(),
             'restaurant' => [
                 'slug' => $restaurant->slug,
                 'name' => $translation->name,
@@ -36,9 +48,7 @@ class PublicRestaurantController extends Controller
                         : null),
                 'social_links' => $restaurant->social_links ?? [],
             ],
-            'menus' => $restaurant->menus()
-                ->with('categories.items')
-                ->get()
+            'menus' => $menus
                 ->map(fn ($menu) => [
                     'slug' => $menu->slug,
                     'name' => $menu->name,

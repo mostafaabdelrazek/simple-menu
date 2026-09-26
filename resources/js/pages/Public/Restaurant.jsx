@@ -2,30 +2,39 @@ import { Head } from '@inertiajs/react';
 import { ArrowRight, MapPin, UtensilsCrossed } from 'lucide-react';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import SocialIcon from '../../components/SocialIcon';
+import { useI18n } from '../../lib/i18n';
+import { menuThemeStyle } from '../../lib/menuTheme';
 
-export default function Restaurant({ locale, languages, restaurant, menus }) {
-    const rtl = locale === 'ar';
+export default function Restaurant({ locale, ui_locale: uiLocale = 'en', languages, restaurant, menus, theme }) {
+    // `locale` is the language the restaurant content is written in; `ui_locale`
+    // is what the visitor asked for, and it owns the writing direction.
+    const rtl = uiLocale === 'ar';
+    const { t } = useI18n();
     const primary = menus.length === 1 ? menus[0] : null;
 
     return (
-        <div dir={rtl ? 'rtl' : 'ltr'} className="min-h-screen bg-stone-950 text-stone-100">
+        <div
+            dir={rtl ? 'rtl' : 'ltr'}
+            className="menu-theme min-h-screen"
+            style={menuThemeStyle(theme)}
+        >
             <Head title={restaurant.name} />
 
             <header className="relative overflow-hidden">
                 {restaurant.banner ? (
                     <div className="absolute inset-0">
                         <img src={restaurant.banner} alt="" className="h-full w-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-stone-950/80 via-stone-950/50 to-stone-950" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-[var(--menu-scrim-top)] via-[var(--menu-scrim-mid)] to-[var(--menu-bg)]" />
                     </div>
                 ) : (
-                    <div className="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-950 to-stone-950">
-                        <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[var(--menu-surface)] to-[var(--menu-bg)]">
+                        <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[var(--menu-accent-soft)] blur-3xl" />
                     </div>
                 )}
 
                 <div className="relative mx-auto max-w-3xl px-4 pb-16 pt-6">
                     <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-amber-400/90">
+                        <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-[var(--menu-accent)]">
                             <UtensilsCrossed className="h-4 w-4" />
                             SimpleMenu
                         </span>
@@ -37,20 +46,20 @@ export default function Restaurant({ locale, languages, restaurant, menus }) {
                             <img
                                 src={restaurant.logo}
                                 alt={restaurant.name}
-                                className="h-24 w-24 rounded-2xl border border-white/10 object-cover shadow-2xl shadow-black/50"
+                                className="h-24 w-24 rounded-2xl border border-[var(--menu-line-strong)] object-cover shadow-2xl shadow-black/40"
                             />
                         ) : (
-                            <span className="flex h-24 w-24 items-center justify-center rounded-2xl bg-amber-500 text-stone-950 shadow-2xl shadow-amber-500/25">
+                            <span className="flex h-24 w-24 items-center justify-center rounded-2xl bg-[var(--menu-accent)] text-[var(--menu-bg)] shadow-2xl shadow-black/30">
                                 <UtensilsCrossed className="h-10 w-10" />
                             </span>
                         )}
 
-                        <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                        <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
                             {restaurant.name}
                         </h1>
 
                         {restaurant.description && (
-                            <p className="mt-3 max-w-xl text-base leading-relaxed text-stone-300">
+                            <p className="mt-3 max-w-xl text-base leading-relaxed text-[var(--menu-muted)]">
                                 {restaurant.description}
                             </p>
                         )}
@@ -62,14 +71,14 @@ export default function Restaurant({ locale, languages, restaurant, menus }) {
                                         href={restaurant.maps_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1.5 rounded-full border border-stone-700/70 bg-stone-900/70 px-3 py-1.5 text-stone-300 backdrop-blur transition hover:border-amber-400/60 hover:text-amber-300"
+                                        className="inline-flex items-center gap-1.5 rounded-full border border-[var(--menu-line-strong)] bg-[var(--menu-scrim-mid)] px-3 py-1.5 text-[var(--menu-fg)] backdrop-blur transition hover:border-[var(--menu-accent)] hover:text-[var(--menu-accent)]"
                                     >
-                                        <MapPin className="h-3.5 w-3.5 text-amber-400" />
-                                        {restaurant.address || 'View on Google Maps'}
+                                        <MapPin className="h-3.5 w-3.5 text-[var(--menu-accent)]" />
+                                        {restaurant.address || t('public.view_on_maps')}
                                     </a>
                                 ) : (
-                                    <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-700/70 bg-stone-900/70 px-3 py-1.5 text-stone-300 backdrop-blur">
-                                        <MapPin className="h-3.5 w-3.5 text-amber-400" />
+                                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--menu-line-strong)] bg-[var(--menu-scrim-mid)] px-3 py-1.5 text-[var(--menu-fg)] backdrop-blur">
+                                        <MapPin className="h-3.5 w-3.5 text-[var(--menu-accent)]" />
                                         {restaurant.address}
                                     </span>
                                 )}
@@ -86,7 +95,7 @@ export default function Restaurant({ locale, languages, restaurant, menus }) {
                                         rel="noopener noreferrer"
                                         aria-label={link.name}
                                         title={link.name}
-                                        className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700/70 bg-stone-900/70 text-stone-300 backdrop-blur transition hover:border-amber-400/60 hover:text-amber-300"
+                                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--menu-line-strong)] bg-[var(--menu-scrim-mid)] text-[var(--menu-fg)] backdrop-blur transition hover:border-[var(--menu-accent)] hover:text-[var(--menu-accent)]"
                                     >
                                         <SocialIcon name={link.icon || link.name} className="h-4 w-4" />
                                     </a>
@@ -97,9 +106,9 @@ export default function Restaurant({ locale, languages, restaurant, menus }) {
                         {primary && (
                             <a
                                 href={primary.url}
-                                className="group mt-9 inline-flex items-center gap-2 rounded-full bg-amber-500 px-7 py-3 font-semibold text-stone-950 shadow-lg shadow-amber-500/25 transition hover:bg-amber-400"
+                                className="group mt-9 inline-flex items-center gap-2 rounded-full bg-[var(--menu-accent)] px-7 py-3 font-semibold text-[var(--menu-bg)] shadow-lg shadow-black/30 transition hover:opacity-90"
                             >
-                                View menu
+                                {t('public.view_menu')}
                                 <ArrowRight
                                     className={`h-4 w-4 transition group-hover:translate-x-0.5 ${rtl ? 'rotate-180' : ''}`}
                                 />
@@ -112,23 +121,23 @@ export default function Restaurant({ locale, languages, restaurant, menus }) {
             <main className="mx-auto max-w-3xl px-4 pb-24">
                 {menus.length > 1 && (
                     <div className="space-y-3">
-                        <p className="pb-1 text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">
-                            Menus
+                        <p className="pb-1 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--menu-muted)]">
+                            {t('public.menus')}
                         </p>
                         {menus.map((menu) => (
                             <a
                                 key={menu.slug}
                                 href={menu.url}
-                                className="group flex items-center justify-between gap-4 rounded-2xl border border-stone-800 bg-stone-900/60 px-5 py-4 transition hover:border-amber-400/50 hover:bg-stone-900"
+                                className="group flex items-center justify-between gap-4 rounded-2xl border border-[var(--menu-line)] bg-[var(--menu-surface)] px-5 py-4 transition hover:border-[var(--menu-accent)] hover:bg-[var(--menu-surface-strong)]"
                             >
                                 <span className="min-w-0">
-                                    <span className="block font-semibold text-stone-100">{menu.name || 'Menu'}</span>
-                                    <span className="mt-1 block text-xs text-stone-500">
-                                        {menu.items_count} {menu.items_count === 1 ? 'item' : 'items'}
+                                    <span className="block font-semibold">{menu.name || t('public.menu_fallback')}</span>
+                                    <span className="mt-1 block text-xs text-[var(--menu-muted)]">
+                                        {t('public.item_count', menu.items_count, { count: menu.items_count })}
                                         {menu.currency ? ` · ${menu.currency}` : ''}
                                     </span>
                                 </span>
-                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-stone-700 text-stone-300 transition group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-stone-950">
+                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--menu-line-strong)] text-[var(--menu-fg)] transition group-hover:border-[var(--menu-accent)] group-hover:bg-[var(--menu-accent)] group-hover:text-[var(--menu-bg)]">
                                     <ArrowRight className={`h-4 w-4 ${rtl ? 'rotate-180' : ''}`} />
                                 </span>
                             </a>
@@ -137,8 +146,8 @@ export default function Restaurant({ locale, languages, restaurant, menus }) {
                 )}
             </main>
 
-            <footer className="pb-10 text-center text-xs text-stone-600">
-                Powered by <span className="text-stone-500">{restaurant.name}</span>
+            <footer className="pb-10 text-center text-xs text-[var(--menu-faint)]">
+                {t('public.powered_by')} <span className="text-[var(--menu-muted)]">{restaurant.name}</span>
             </footer>
         </div>
     );

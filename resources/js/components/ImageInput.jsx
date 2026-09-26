@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import { ImagePlus, Loader2, X } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
 
-export default function ImageInput({ value, onChange, folder = 'restaurants', label = 'Upload image' }) {
+export default function ImageInput({ value, onChange, folder = 'restaurants', label }) {
+    const { t } = useI18n();
     const inputRef = useRef(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState(null);
@@ -34,12 +36,12 @@ export default function ImageInput({ value, onChange, folder = 'restaurants', la
             const payload = await response.json();
 
             if (!response.ok) {
-                throw new Error(payload.errors?.file?.[0] ?? payload.message ?? 'Upload failed.');
+                throw new Error(payload.errors?.file?.[0] ?? payload.message ?? t('common.upload_failed'));
             }
 
             onChange({ url: payload.url, path: payload.path });
         } catch (err) {
-            setError(err.message ?? 'Upload failed.');
+            setError(err.message ?? t('common.upload_failed'));
         } finally {
             setUploading(false);
             if (inputRef.current) inputRef.current.value = '';
@@ -55,7 +57,7 @@ export default function ImageInput({ value, onChange, folder = 'restaurants', la
         <div>
             {value ? (
                 <div className="relative overflow-hidden rounded-lg border border-stone-300">
-                    <img src={value.url} alt={label} className="h-28 w-full object-cover" />
+                    <img src={value.url} alt={label ?? ''} className="h-28 w-full object-cover" />
                     <button
                         type="button"
                         onClick={clear}
@@ -72,7 +74,7 @@ export default function ImageInput({ value, onChange, folder = 'restaurants', la
                     className="flex h-28 w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-stone-300 text-stone-500 hover:border-amber-400 hover:text-amber-600"
                 >
                     {uploading ? <Loader2 className="h-6 w-6 animate-spin" /> : <ImagePlus className="h-6 w-6" />}
-                    <span className="text-xs">{uploading ? 'Uploading…' : label}</span>
+                    <span className="text-xs">{uploading ? t('common.uploading') : (label ?? t('common.upload_image'))}</span>
                 </button>
             )}
             <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFile} />

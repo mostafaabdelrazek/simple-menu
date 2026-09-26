@@ -71,6 +71,7 @@ class RestaurantController extends Controller
                     'name' => $menu->name ?? '',
                     'currency' => $menu->currency,
                     'languages' => $menu->languages,
+                    'theme' => $menu->theme(),
                 ] : null,
                 'categories' => ($menu?->categories ?? collect())->map(function ($category) {
                     return [
@@ -134,6 +135,7 @@ class RestaurantController extends Controller
                     'name' => $data['menu']['name'] ?? null,
                     'currency' => $data['menu']['currency'],
                     'languages' => $data['menu']['languages'],
+                    ...$this->themeAttributes($data),
                 ]);
             } else {
                 $menu = $this->createMenu($restaurant, $data);
@@ -145,7 +147,7 @@ class RestaurantController extends Controller
         });
 
         return redirect()->route('restaurants.complete', $restaurant->slug)
-            ->with('success', __('Your restaurant and menu have been updated.'));
+            ->with('success', __('flash.updated'));
     }
 
     /**
@@ -210,7 +212,25 @@ class RestaurantController extends Controller
             'name' => $data['menu']['name'] ?? null,
             'currency' => $data['menu']['currency'],
             'languages' => $data['menu']['languages'],
+            ...$this->themeAttributes($data),
         ]);
+    }
+
+    /**
+     * The validated theme, normalised to lowercase hex.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, string|null>
+     */
+    private function themeAttributes(array $data): array
+    {
+        $theme = $data['menu']['theme'] ?? [];
+
+        return [
+            'theme_background' => isset($theme['background']) ? strtolower($theme['background']) : null,
+            'theme_primary' => isset($theme['primary']) ? strtolower($theme['primary']) : null,
+            'theme_font' => $theme['font'] ?? null,
+        ];
     }
 
     /**

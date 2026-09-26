@@ -247,6 +247,37 @@ class PublicPagesTest extends TestCase
                 ->where('languages', ['en']));
     }
 
+    public function test_interface_language_stays_requested_when_content_language_is_missing(): void
+    {
+        $user = User::factory()->phoneVerified()->create();
+
+        $restaurant = Restaurant::factory()
+            ->for($user, 'owner')
+            ->has(RestaurantTranslation::factory()->count(2)->sequence(
+                ['locale' => 'en', 'name' => 'Bilingual Grill'],
+                ['locale' => 'ar', 'name' => 'مشاوي ثنائية'],
+            ), 'translations')
+            ->create();
+
+        $menu = Menu::factory()->for($restaurant)->create(['slug' => 'menu-bilingual', 'languages' => ['en', 'ar']]);
+
+        // Neither page has French content, so the copy falls back to the saved
+        // preference while the interface keeps the requested French.
+        $this->withUnencryptedCookie('simplemenu_lang', 'ar')
+            ->get('/m/'.$menu->slug.'?lang=fr')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('locale', 'ar')
+                ->where('ui_locale', 'fr')
+                ->where('languages', ['en', 'ar']));
+
+        $this->get('/r/'.$restaurant->slug.'?lang=fr')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('locale', 'ar')
+                ->where('ui_locale', 'fr'));
+    }
+
     public function test_unknown_menu_returns_404(): void
     {
         $this->get('/m/never-existed')->assertNotFound();

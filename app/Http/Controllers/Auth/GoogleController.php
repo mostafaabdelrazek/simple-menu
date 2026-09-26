@@ -20,7 +20,7 @@ class GoogleController extends Controller
     public function callback(Request $request): RedirectResponse
     {
         if ($request->has('error')) {
-            return redirect()->route('login')->with('error', __('Google sign-in was cancelled or failed.'));
+            return redirect()->route('login')->with('error', __('flash.google_failed'));
         }
 
         $googleUser = Socialite::driver('google')->user();

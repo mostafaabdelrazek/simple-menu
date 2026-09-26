@@ -17,9 +17,12 @@ import {
 } from 'lucide-react';
 import { CURRENCIES, LOCALES } from '../../lib/constants';
 import AppShell from '../../components/AppShell';
+import AppearancePicker from '../../components/restaurant/AppearancePicker';
 import FlashMessage from '../../components/FlashMessage';
 import ImageInput from '../../components/ImageInput';
 import SocialIcon from '../../components/SocialIcon';
+import { useI18n } from '../../lib/i18n';
+import { DEFAULT_THEME, normalizeTheme } from '../../lib/menuTheme';
 
 const DEFAULT_SOCIALS = [
     { name: 'facebook', url: '', icon: 'facebook' },
@@ -27,7 +30,13 @@ const DEFAULT_SOCIALS = [
     { name: 'instagram', url: '', icon: 'instagram' },
 ];
 
-const STEPS = ['Restaurant', 'Menu', 'Categories', 'Items', 'Generate'];
+const STEP_KEYS = [
+    'wizard.step_restaurant',
+    'wizard.step_menu',
+    'wizard.step_categories',
+    'wizard.step_items',
+    'wizard.step_generate',
+];
 
 function syncTranslations(locales, existing = {}) {
     const next = {};
@@ -68,6 +77,8 @@ export default function Wizard({
     restaurant_slug = null,
     existing = null,
 }) {
+    const { t } = useI18n();
+    const steps = STEP_KEYS.map((key) => t(key));
     const [step, setStep] = useState(0);
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -89,10 +100,12 @@ export default function Wizard({
 
     const [menu, setMenu] = useState(
         existing?.menu
-            ?? {
+            ? { ...existing.menu, theme: normalizeTheme(existing.menu.theme) }
+            : {
                   name: '',
                   currency: 'EGP',
                   languages: ['en'],
+                  theme: { ...DEFAULT_THEME },
               }
     );
 
@@ -244,25 +257,25 @@ export default function Wizard({
         const next = {};
 
         if (current === 0) {
-            if (restaurant.languages.length === 0) next.languages = 'Select at least one language.';
+            if (restaurant.languages.length === 0) next.languages = t('wizard.err_languages');
             for (const locale of restaurant.languages) {
                 if (!restaurant.translations[locale]?.name.trim()) {
-                    next[`name_${locale}`] = `Please set the restaurant name in ${LOCALES[locale]}.`;
+                    next[`name_${locale}`] = t('wizard.err_name_locale', { locale: LOCALES[locale] });
                 }
             }
         }
 
         if (current === 1) {
-            if (menu.languages.length === 0) next.menu_languages = 'Select at least one language for the menu.';
-            if (!menu.currency) next.currency = 'Select a currency.';
+            if (menu.languages.length === 0) next.menu_languages = t('wizard.err_menu_languages');
+            if (!menu.currency) next.currency = t('wizard.err_currency');
         }
 
         if (current === 2) {
-            if (categories.length === 0) next.categories = 'Add at least one category.';
+            if (categories.length === 0) next.categories = t('wizard.err_categories');
             categories.forEach((category, i) => {
                 for (const locale of menu.languages) {
                     if (!category.translations[locale]?.name.trim()) {
-                        next[`cat_${i}_${locale}`] = `Category name required in ${LOCALES[locale]}.`;
+                        next[`cat_${i}_${locale}`] = t('wizard.err_category_locale', { locale: LOCALES[locale] });
                     }
                 }
             });
@@ -273,7 +286,7 @@ export default function Wizard({
                 (c) => c.items.length === 0
             );
             if (itemsMissing) {
-                next.items = 'Tip: every category should contain at least one item.';
+                next.items = t('wizard.err_items');
             }
         }
 
@@ -284,7 +297,7 @@ export default function Wizard({
 
     function goNext() {
         if (!validateStep(step)) return;
-        setStep((s) => Math.min(s + 1, STEPS.length - 1));
+        setStep((s) => Math.min(s + 1, steps.length - 1));
     }
 
     function goBack() {
@@ -337,6 +350,7 @@ export default function Wizard({
                 name: menu.name || null,
                 currency: menu.currency,
                 languages: menu.languages,
+                theme: normalizeTheme(menu.theme),
             },
             categories: categories.map((category) => ({
                 translations: category.translations,
@@ -369,23 +383,23 @@ export default function Wizard({
         }
     }
 
-    const toward_end = step === STEPS.length - 1;
+    const toward_end = step === steps.length - 1;
 
     return (
         <AppShell>
-            <Head title={is_editing ? 'Edit your menu' : 'Create your restaurant'} />
+            <Head title={t(is_editing ? 'wizard.title_edit' : 'wizard.title_create')} />
             <FlashMessage />
 
             <div className="mx-auto max-w-3xl">
                 <div className="mb-8 flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-stone-900">
-                        {is_editing ? 'Edit your menu' : 'Create your menu'}
+                        {t(is_editing ? 'wizard.heading_edit' : 'wizard.heading_create')}
                     </h1>
                 </div>
 
                 {/* Stepper */}
                 <ol className="mb-8 flex items-center gap-2 overflow-x-auto pb-1">
-                    {STEPS.map((label, i) => (
+                    {steps.map((label, i) => (
                         <li key={label} className="flex shrink-0 items-center gap-2">
                             <button
                                 type="button"
@@ -401,7 +415,7 @@ export default function Wizard({
                                 {i < step ? <Check className="h-3.5 w-3.5" /> : <span>{i + 1}</span>}
                                 <span className="hidden sm:inline">{label}</span>
                             </button>
-                            {i < STEPS.length - 1 && <span className="h-px w-4 bg-stone-200" />}
+                            {i < steps.length - 1 && <span className="h-px w-4 bg-stone-200" />}
                         </li>
                     ))}
                 </ol>
@@ -412,11 +426,9 @@ export default function Wizard({
                             <div>
                                 <h2 className="flex items-center gap-2 font-semibold text-stone-900">
                                     <Globe2 className="h-5 w-5 text-amber-500" />
-                                    Supported languages
+                                    {t('wizard.languages_title')}
                                 </h2>
-                                <p className="mt-1 text-sm text-stone-600">
-                                    Customers can switch between these languages on your public pages.
-                                </p>
+                                <p className="mt-1 text-sm text-stone-600">{t('wizard.languages_hint')}</p>
                                 <div className="mt-3 flex flex-wrap gap-2">
                                     {supportedLocales.map((locale) => {
                                         const active = restaurant.languages.includes(locale);
@@ -454,7 +466,7 @@ export default function Wizard({
                                 {restaurant.languages.map((locale) => (
                                     <fieldset key={locale}>
                                         <legend className="mb-1 text-sm font-medium text-stone-700">
-                                            Name · {LOCALES[locale]}
+                                            {t('wizard.name_for', { locale: LOCALES[locale] })}
                                         </legend>
                                         <input
                                             type="text"
@@ -476,7 +488,10 @@ export default function Wizard({
                                 {restaurant.languages.map((locale) => (
                                     <fieldset key={locale}>
                                         <legend className="mb-1 text-sm font-medium text-stone-700">
-                                            Description (optional) · {LOCALES[locale]}
+                                            {t('wizard.description_for', {
+                                                optional: t('common.optional'),
+                                                locale: LOCALES[locale],
+                                            })}
                                         </legend>
                                         <textarea
                                             rows={3}
@@ -491,7 +506,7 @@ export default function Wizard({
                             <div>
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-stone-900">
                                     <MapPin className="h-4 w-4 text-amber-500" />
-                                    Main branch location
+                                    {t('wizard.location_title')}
                                 </h3>
                                 <div className="mt-3 grid gap-3">
                                     <div>
@@ -499,7 +514,7 @@ export default function Wizard({
                                             type="text"
                                             value={restaurant.address}
                                             onChange={(e) => setRestaurant({ ...restaurant, address: e.target.value })}
-                                            placeholder="Street address (optional)"
+                                            placeholder={t('wizard.address_placeholder', { optional: t('common.optional') })}
                                             className="w-full rounded-lg border border-stone-300 px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                                         />
                                     </div>
@@ -509,11 +524,11 @@ export default function Wizard({
                                                 type="url"
                                                 value={restaurant.maps_url}
                                                 onChange={(e) => setRestaurant({ ...restaurant, maps_url: e.target.value })}
-                                                placeholder="https://maps.google.com/?q=... (optional)"
+                                                placeholder={t('wizard.maps_placeholder', { optional: t('common.optional') })}
                                                 className="w-full rounded-lg border border-stone-300 px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                                             />
                                             <p className="mt-1 text-xs text-stone-500">
-                                                Paste a Google Maps link from &quot;Share &gt; Copy link&quot;.
+                                                {t('wizard.maps_hint')}
                                             </p>
                                         </div>
                                         <button
@@ -522,7 +537,7 @@ export default function Wizard({
                                             className="inline-flex items-center justify-center gap-1 self-start rounded-lg border border-stone-300 px-3 py-2 text-sm text-stone-600 hover:bg-stone-50"
                                         >
                                             <LocateFixed className="h-4 w-4" />
-                                            Use my location
+                                            {t('wizard.use_location')}
                                         </button>
                                     </div>
                                 </div>
@@ -530,20 +545,27 @@ export default function Wizard({
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div>
-                                    <h3 className="mb-2 text-sm font-semibold text-stone-900">Logo</h3>
-                                    <ImageInput value={restaurant.logo} onChange={(v) => setRestaurant({ ...restaurant, logo: v })} label="Upload logo" />
+                                    <h3 className="mb-2 text-sm font-semibold text-stone-900">{t('wizard.logo')}</h3>
+                                    <ImageInput
+                                        value={restaurant.logo}
+                                        onChange={(v) => setRestaurant({ ...restaurant, logo: v })}
+                                        label={t('wizard.upload_logo')}
+                                    />
                                 </div>
                                 <div>
-                                    <h3 className="mb-2 text-sm font-semibold text-stone-900">Banner</h3>
-                                    <ImageInput value={restaurant.banner} onChange={(v) => setRestaurant({ ...restaurant, banner: v })} folder="restaurants" label="Upload banner" />
+                                    <h3 className="mb-2 text-sm font-semibold text-stone-900">{t('wizard.banner')}</h3>
+                                    <ImageInput
+                                        value={restaurant.banner}
+                                        onChange={(v) => setRestaurant({ ...restaurant, banner: v })}
+                                        folder="restaurants"
+                                        label={t('wizard.upload_banner')}
+                                    />
                                 </div>
                             </div>
 
                             <div>
-                                <h3 className="text-sm font-semibold text-stone-900">Social media</h3>
-                                <p className="mt-1 text-sm text-stone-600">
-                                    Add links to your pages — leave fields empty to skip. Empty fields are ignored.
-                                </p>
+                                <h3 className="text-sm font-semibold text-stone-900">{t('wizard.social_title')}</h3>
+                                <p className="mt-1 text-sm text-stone-600">{t('wizard.social_hint')}</p>
                                 <div className="mt-3 space-y-3">
                                     {restaurant.social_links.map((link, i) => (
                                         <div key={i} className="flex items-center gap-2 rounded-lg border border-stone-200 p-2">
@@ -554,7 +576,7 @@ export default function Wizard({
                                                 type="text"
                                                 value={link.name}
                                                 onChange={(e) => updateSocialLink(i, 'name', e.target.value)}
-                                                placeholder="Link name"
+                                                placeholder={t('wizard.link_name')}
                                                 className="w-28 rounded-md border border-stone-300 px-2 py-2 text-sm focus:border-amber-500 focus:outline-none"
                                                 readOnly={i < 3}
                                             />
@@ -579,7 +601,7 @@ export default function Wizard({
                                     className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-700"
                                 >
                                     <Plus className="h-4 w-4" />
-                                    Add custom link
+                                    {t('wizard.add_link')}
                                 </button>
                             </div>
                         </section>
@@ -590,17 +612,15 @@ export default function Wizard({
                             <div>
                                 <h2 className="flex items-center gap-2 font-semibold text-stone-900">
                                     <UtensilsCrossed className="h-5 w-5 text-amber-500" />
-                                    Menu setup
+                                    {t('wizard.menu_setup')}
                                 </h2>
-                                <p className="mt-1 text-sm text-stone-600">
-                                    Choose the menu currency and the languages that will appear on the menu.
-                                </p>
+                                <p className="mt-1 text-sm text-stone-600">{t('wizard.menu_setup_hint')}</p>
                             </div>
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div>
                                     <label htmlFor="currency" className="mb-1 block text-sm font-medium text-stone-700">
-                                        Currency *
+                                        {t('wizard.currency')}
                                     </label>
                                     <select
                                         id="currency"
@@ -619,7 +639,7 @@ export default function Wizard({
 
                                 <div>
                                     <label htmlFor="menu_name" className="mb-1 block text-sm font-medium text-stone-700">
-                                        Menu name (optional)
+                                        {t('wizard.menu_name', { optional: t('common.optional') })}
                                     </label>
                                     <input
                                         id="menu_name"
@@ -634,7 +654,7 @@ export default function Wizard({
 
                             <div>
                                 <label className="mb-1 block text-sm font-medium text-stone-700">
-                                    Menu languages (within restaurant languages) *
+                                    {t('wizard.menu_languages')}
                                 </label>
                                 <div className="flex flex-wrap gap-2">
                                     {restaurant.languages.map((locale) => {
@@ -664,6 +684,12 @@ export default function Wizard({
                                 </div>
                                 {errors.menu_languages && <p className="mt-1 text-xs text-red-600">{errors.menu_languages}</p>}
                             </div>
+
+                            <AppearancePicker
+                                theme={menu.theme}
+                                onChange={(theme) => setMenu({ ...menu, theme })}
+                                errors={errors}
+                            />
                         </section>
                     )}
 
@@ -673,11 +699,9 @@ export default function Wizard({
                                 <div>
                                     <h2 className="flex items-center gap-2 font-semibold text-stone-900">
                                         <ListPlus className="h-5 w-5 text-amber-500" />
-                                        Menu categories
+                                        {t('wizard.categories_title')}
                                     </h2>
-                                    <p className="mt-1 text-sm text-stone-600">
-                                        Group your items — e.g. Appetizers, Mains, Drinks.
-                                    </p>
+                                    <p className="mt-1 text-sm text-stone-600">{t('wizard.categories_hint')}</p>
                                 </div>
                                 <button
                                     type="button"
@@ -685,7 +709,7 @@ export default function Wizard({
                                     className="inline-flex items-center gap-1 rounded-lg border border-stone-300 px-3 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50"
                                 >
                                     <Plus className="h-4 w-4" />
-                                    Add category
+                                    {t('wizard.add_category')}
                                 </button>
                             </div>
 
@@ -699,7 +723,7 @@ export default function Wizard({
                                         className="flex w-full items-center justify-between px-4 py-3 text-left"
                                     >
                                         <span className="text-sm font-medium text-stone-800">
-                                            Category {i + 1}
+                                            {t('wizard.category_count', { count: i + 1 })}
                                             {category.translations[menu.languages[0]]?.name && (
                                                 <span className="ml-2 text-stone-500">
                                                     — {category.translations[menu.languages[0]].name}
@@ -732,7 +756,7 @@ export default function Wizard({
                                                 {menu.languages.map((locale) => (
                                                     <div key={locale}>
                                                         <label className="mb-1 block text-xs font-medium text-stone-600">
-                                                            Name · {LOCALES[locale]}
+                                                            {t('wizard.name_for', { locale: LOCALES[locale] })}
                                                         </label>
                                                         <input
                                                             type="text"
@@ -760,11 +784,9 @@ export default function Wizard({
                                 <div>
                                     <h2 className="flex items-center gap-2 font-semibold text-stone-900">
                                         <Sparkles className="h-5 w-5 text-amber-500" />
-                                        Menu items
+                                        {t('wizard.items_title')}
                                     </h2>
-                                    <p className="mt-1 text-sm text-stone-600">
-                                        Add dishes to each category with translated names and prices.
-                                    </p>
+                                    <p className="mt-1 text-sm text-stone-600">{t('wizard.items_hint')}</p>
                                 </div>
                             </div>
 
@@ -773,7 +795,8 @@ export default function Wizard({
                             {categories.map((category, categoryIndex) => (
                                 <div key={categoryIndex} className="rounded-xl border border-stone-200 p-4">
                                     <h3 className="mb-3 font-medium text-stone-800">
-                                        {category.translations[menu.languages[0]]?.name || `Category ${categoryIndex + 1}`}
+                                        {category.translations[menu.languages[0]]?.name ||
+                                            t('wizard.category_count', { count: categoryIndex + 1 })}
                                     </h3>
 
                                     <div className="space-y-4">
@@ -783,7 +806,7 @@ export default function Wizard({
                                                     {menu.languages.map((locale) => (
                                                         <div key={locale}>
                                                             <label className="mb-1 block text-xs font-medium text-stone-600">
-                                                                Name · {LOCALES[locale]}
+                                                                {t('wizard.name_for', { locale: LOCALES[locale] })}
                                                             </label>
                                                             <input
                                                                 type="text"
@@ -799,7 +822,7 @@ export default function Wizard({
                                                     {menu.languages.map((locale) => (
                                                         <div key={locale}>
                                                             <label className="mb-1 block text-xs font-medium text-stone-600">
-                                                                Description · {LOCALES[locale]}
+                                                                {t('wizard.item_description_for', { locale: LOCALES[locale] })}
                                                             </label>
                                                             <input
                                                                 type="text"
@@ -813,7 +836,9 @@ export default function Wizard({
 
                                                 <div className="mt-3 grid gap-3 sm:grid-cols-4">
                                                     <div className="sm:col-span-1">
-                                                        <label className="mb-1 block text-xs font-medium text-stone-600">Price *</label>
+                                                        <label className="mb-1 block text-xs font-medium text-stone-600">
+                                                                {t('wizard.price')}
+                                                            </label>
                                                         <input
                                                             type="number"
                                                             min="0"
@@ -824,7 +849,9 @@ export default function Wizard({
                                                         />
                                                     </div>
                                                     <div className="sm:col-span-1">
-                                                        <label className="mb-1 block text-xs font-medium text-stone-600">Discount price</label>
+                                                        <label className="mb-1 block text-xs font-medium text-stone-600">
+                                                                {t('wizard.discount_price')}
+                                                            </label>
                                                         <input
                                                             type="number"
                                                             min="0"
@@ -835,9 +862,16 @@ export default function Wizard({
                                                         />
                                                     </div>
                                                     <div className="sm:col-span-2">
-                                                        <label className="mb-1 block text-xs font-medium text-stone-600">Image</label>
+                                                        <label className="mb-1 block text-xs font-medium text-stone-600">
+                                                                {t('wizard.image')}
+                                                            </label>
                                                         <div className="h-full">
-                                                            <ImageInput value={item.image} onChange={(v) => updateItem(categoryIndex, itemIndex, 'image', v)} folder="menus" label="Item photo (optional)" />
+                                                            <ImageInput
+                                                                value={item.image}
+                                                                onChange={(v) => updateItem(categoryIndex, itemIndex, 'image', v)}
+                                                                folder="menus"
+                                                                label={t('wizard.item_photo', { optional: t('common.optional') })}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -849,7 +883,7 @@ export default function Wizard({
                                                         className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-stone-500 hover:bg-red-50 hover:text-red-600"
                                                     >
                                                         <Trash2 className="h-3.5 w-3.5" />
-                                                        Remove item
+                                                        {t('wizard.remove_item')}
                                                     </button>
                                                 </div>
                                             </div>
@@ -862,7 +896,7 @@ export default function Wizard({
                                         className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-700"
                                     >
                                         <Plus className="h-4 w-4" />
-                                        Add item
+                                        {t('wizard.add_item')}
                                     </button>
                                 </div>
                             ))}
@@ -875,37 +909,37 @@ export default function Wizard({
                                 <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
                                     <Sparkles className="h-6 w-6" />
                                 </span>
-                                <h2 className="mt-4 text-xl font-bold text-stone-900">{is_editing ? 'Review changes' : 'Ready to publish'}</h2>
+                                <h2 className="mt-4 text-xl font-bold text-stone-900">
+                                    {t(is_editing ? 'wizard.review_title' : 'wizard.publish_title')}
+                                </h2>
                                 <p className="mt-1 text-sm text-stone-600">
-                                    {is_editing
-                                        ? "We'll update your restaurant, menu, and public links."
-                                        : "We'll create your restaurant, menu, and two public links."}
+                                    {t(is_editing ? 'wizard.review_hint' : 'wizard.publish_hint')}
                                 </p>
                             </div>
 
                             <div className="rounded-xl border border-stone-200 divide-y divide-stone-100">
                                 <div className="flex justify-between px-4 py-3 text-sm">
-                                    <span className="text-stone-500">Restaurant</span>
+                                    <span className="text-stone-500">{t('wizard.summary_restaurant')}</span>
                                     <span className="font-medium text-stone-900">
                                         {restaurant.translations[menu.languages[0]]?.name}
                                     </span>
                                 </div>
                                 <div className="flex justify-between px-4 py-3 text-sm">
-                                    <span className="text-stone-500">Languages</span>
+                                    <span className="text-stone-500">{t('wizard.summary_languages')}</span>
                                     <span className="font-medium text-stone-900">
                                         {restaurant.languages.map((l) => LOCALES[l]).join(', ')}
                                     </span>
                                 </div>
                                 <div className="flex justify-between px-4 py-3 text-sm">
-                                    <span className="text-stone-500">Currency</span>
+                                    <span className="text-stone-500">{t('wizard.summary_currency')}</span>
                                     <span className="font-medium text-stone-900">{menu.currency}</span>
                                 </div>
                                 <div className="flex justify-between px-4 py-3 text-sm">
-                                    <span className="text-stone-500">Categories</span>
+                                    <span className="text-stone-500">{t('wizard.summary_categories')}</span>
                                     <span className="font-medium text-stone-900">{categories.length}</span>
                                 </div>
                                 <div className="flex justify-between px-4 py-3 text-sm">
-                                    <span className="text-stone-500">Items</span>
+                                    <span className="text-stone-500">{t('wizard.summary_items')}</span>
                                     <span className="font-medium text-stone-900">
                                         {categories.reduce((sum, c) => sum + c.items.length, 0)}
                                     </span>
@@ -914,7 +948,7 @@ export default function Wizard({
 
                             {Object.keys(errors).length > 0 && (
                                 <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                                    Something went wrong: {Object.values(errors).join(' ')}
+                                    {t('wizard.something_wrong', { errors: Object.values(errors).join(' ') })}
                                 </div>
                             )}
 
@@ -926,8 +960,8 @@ export default function Wizard({
                             >
                                 {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
                                 {submitting
-                                    ? (is_editing ? 'Saving changes…' : 'Creating your menu…')
-                                    : (is_editing ? 'Save changes' : 'Generate menu & links')}
+                                    ? t(is_editing ? 'wizard.saving' : 'wizard.creating')
+                                    : t(is_editing ? 'wizard.save' : 'wizard.generate')}
                             </button>
                         </section>
                     )}
@@ -942,7 +976,7 @@ export default function Wizard({
                             className="inline-flex items-center gap-1 rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-white"
                         >
                             <ArrowLeft className="h-4 w-4" />
-                            Back
+                            {t('wizard.back')}
                         </button>
                     ) : (
                         <span />
@@ -954,7 +988,7 @@ export default function Wizard({
                             onClick={goNext}
                             className="inline-flex items-center gap-1 rounded-lg bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-stone-800"
                         >
-                            Continue
+                            {t('wizard.continue')}
                             <ArrowRight className="h-4 w-4" />
                         </button>
                     )}

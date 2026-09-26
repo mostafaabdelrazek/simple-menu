@@ -7,7 +7,7 @@
 export const LANDING_COPY = {
     en: {
         meta: {
-            title: 'Free Digital Menu with QR Code for Restaurants | SimpleMenu',
+            title: 'Free Digital Menu with QR Code for Restaurants',
             description:
                 'Create a free digital menu for your restaurant or café in Arabic, English and French, then share it with one QR code. No subscription, no app for your guests.',
         },
@@ -198,7 +198,7 @@ export const LANDING_COPY = {
 
     ar: {
         meta: {
-            title: 'منيو إلكتروني مجاني بكود QR للمطاعم والمقاهي | SimpleMenu',
+            title: 'منيو إلكتروني مجاني بكود QR للمطاعم والمقاهي',
             description:
                 'أنشئ منيو إلكتروني مجاني لمطعمك أو مقهيك بالعربية والإنجليزية والفرنسية، وشاركه بكود QR واحد. بدون اشتراك، وبدون تطبيق للضيوف.',
         },
@@ -386,7 +386,7 @@ export const LANDING_COPY = {
 
     fr: {
         meta: {
-            title: 'Menu digital gratuit avec QR code pour restaurants | SimpleMenu',
+            title: 'Menu digital gratuit avec QR code pour restaurants',
             description:
                 'Créez un menu digital gratuit pour votre restaurant ou café en arabe, anglais et français, puis partagez-le avec un seul QR code. Sans abonnement, sans application pour vos clients.',
         },

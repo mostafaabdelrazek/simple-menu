@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Menu;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -45,6 +46,11 @@ class StoreRestaurantRequest extends FormRequest
             'menu.languages' => ['required', 'array', 'min:1'],
             'menu.languages.*' => [Rule::in($restaurantLanguages)],
 
+            'menu.theme' => ['nullable', 'array'],
+            'menu.theme.background' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'menu.theme.primary' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'menu.theme.font' => ['nullable', Rule::in(Menu::THEME_FONTS)],
+
             'categories' => ['required', 'array', 'min:1', 'max:100'],
             'categories.*.translations' => ['required', 'array'],
             'categories.*.translations.*.name' => ['required', 'string', 'max:255'],
@@ -59,6 +65,35 @@ class StoreRestaurantRequest extends FormRequest
         ];
     }
 
+    /**
+     * The messages a restaurant owner actually sees, translated.
+     *
+     * The framework's own validation strings stay in English until per-locale
+     * validation files are published; these cover the rules this form owns.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'restaurant.languages.required' => __('validation.languages_required'),
+            'restaurant.languages.min' => __('validation.languages_required'),
+            'restaurant.translations.*.name.required' => __('validation.name_required', ['locale' => ':attribute']),
+            'restaurant.translations.*.description.max' => __('validation.description_max'),
+            'menu.currency.required' => __('validation.currency_required'),
+            'menu.languages.min' => __('validation.menu_languages_subset'),
+            'menu.theme.background.regex' => __('validation.background_color'),
+            'menu.theme.primary.regex' => __('validation.text_color'),
+            'menu.theme.font.in' => __('validation.font_family'),
+            'categories.required' => __('validation.items_required'),
+            'categories.min' => __('validation.items_required'),
+            'categories.*.translations.*.name.required' => __('validation.category_name_required', ['locale' => ':attribute']),
+            'categories.*.items.*.price.required' => __('validation.price_required'),
+            'categories.*.items.*.price.numeric' => __('validation.price_required'),
+            'categories.*.items.*.discount_price.lt' => __('validation.discount_price'),
+        ];
+    }
+
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {
@@ -67,25 +102,25 @@ class StoreRestaurantRequest extends FormRequest
 
             foreach (array_keys($this->input('restaurant.translations', [])) as $locale) {
                 if (! in_array($locale, $restaurantLanguages, true)) {
-                    $validator->errors()->add('restaurant.translations', "Translation locale '{$locale}' is not in the selected restaurant languages.");
+                    $validator->errors()->add('restaurant.translations', __('validation.translations_subset', ['locale' => $locale]));
                 }
             }
 
             if (array_intersect($menuLanguages, $restaurantLanguages) !== $menuLanguages || $menuLanguages === []) {
-                $validator->errors()->add('menu.languages', 'Menu languages must be a non-empty subset of the restaurant languages.');
+                $validator->errors()->add('menu.languages', __('validation.menu_languages_subset'));
             }
 
             foreach ($this->input('categories', []) as $index => $category) {
                 foreach (array_keys($category['translations'] ?? []) as $locale) {
                     if (! in_array($locale, $menuLanguages, true)) {
-                        $validator->errors()->add("categories.{$index}.translations", "Category translation locale '{$locale}' is not in the selected menu languages.");
+                        $validator->errors()->add("categories.{$index}.translations", __('validation.translations_subset', ['locale' => $locale]));
                     }
                 }
 
                 foreach ($category['items'] ?? [] as $itemIndex => $item) {
                     foreach (array_keys($item['translations'] ?? []) as $locale) {
                         if (! in_array($locale, $menuLanguages, true)) {
-                            $validator->errors()->add("categories.{$index}.items.{$itemIndex}.translations", "Item translation locale '{$locale}' is not in the selected menu languages.");
+                            $validator->errors()->add("categories.{$index}.items.{$itemIndex}.translations", __('validation.translations_subset', ['locale' => $locale]));
                         }
                     }
                 }

@@ -23,6 +23,32 @@
 }
 
 /*
+ * Menu theming.
+ *
+ * menuThemeStyle() sets --menu-bg, --menu-fg, --menu-font and the accent from
+ * the owner's choices; everything below is derived from those, so a light or a
+ * dark menu stays internally consistent without any per-page branching.
+ */
+@layer components {
+    .menu-theme {
+        --menu-muted: color-mix(in srgb, var(--menu-fg) 66%, transparent);
+        --menu-faint: color-mix(in srgb, var(--menu-fg) 45%, transparent);
+        --menu-line: color-mix(in srgb, var(--menu-fg) 16%, transparent);
+        --menu-line-strong: color-mix(in srgb, var(--menu-fg) 28%, transparent);
+        --menu-surface: color-mix(in srgb, var(--menu-fg) 6%, var(--menu-bg));
+        --menu-surface-strong: color-mix(in srgb, var(--menu-fg) 12%, var(--menu-bg));
+        --menu-scrim-top: color-mix(in srgb, var(--menu-bg) 82%, transparent);
+        --menu-scrim-mid: color-mix(in srgb, var(--menu-bg) 45%, transparent);
+    }
+
+    .menu-theme {
+        background-color: var(--menu-bg);
+        color: var(--menu-fg);
+        font-family: var(--menu-font);
+    }
+}
+
+/*
  * Scroll reveals. Elements start visible and only animate once the visitor
  * shows no objection to motion, so content never disappears when JavaScript or
  * IntersectionObserver is unavailable.

@@ -26,10 +26,10 @@ class DemoLoginController extends Controller
 
         if (! $user->hasVerifiedPhone()) {
             return redirect()->route('onboarding.phone')
-                ->with('success', __('Signed in as demo user. Please verify your phone to continue.'));
+                ->with('success', __('flash.signed_in_verify'));
         }
 
-        return redirect()->intended(route('dashboard'))->with('success', __('Signed in as demo user.'));
+        return redirect()->intended(route('dashboard'))->with('success', __('flash.signed_in'));
     }
 
     private function isEnabled(): bool

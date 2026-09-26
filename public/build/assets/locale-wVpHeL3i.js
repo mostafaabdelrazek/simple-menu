@@ -1,0 +1,1 @@
+function e(e){document.cookie=`simplemenu_lang=${e};path=/;max-age=31536000;samesite=Lax`;try{localStorage.setItem(`simplemenu_lang`,e)}catch{}}export{e as t};

@@ -1,19 +1,11 @@
 import { Globe2 } from 'lucide-react';
 import { LOCALES } from '../lib/constants';
+import { rememberLocale } from '../lib/locale';
 
 export default function LanguageSwitcher({ current, languages, variant = 'light' }) {
     if (!languages || languages.length < 2) return null;
 
     const dark = variant === 'dark';
-
-    function remember(lang) {
-        document.cookie = `simplemenu_lang=${lang};path=/;max-age=31536000;samesite=Lax`;
-        try {
-            localStorage.setItem('simplemenu_lang', lang);
-        } catch {
-            // Storage unavailable; the cookie is enough.
-        }
-    }
 
     return (
         <div
@@ -28,7 +20,7 @@ export default function LanguageSwitcher({ current, languages, variant = 'light'
                         key={lang}
                         type="button"
                         onClick={() => {
-                            remember(lang);
+                            rememberLocale(lang);
                             const url = new URL(window.location.href);
                             url.searchParams.set('lang', lang);
                             window.location.href = url.toString();

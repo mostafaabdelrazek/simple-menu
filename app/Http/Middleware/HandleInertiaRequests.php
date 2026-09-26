@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Translations;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -27,6 +28,8 @@ class HandleInertiaRequests extends Middleware
             'app' => [
                 'name' => config('app.name'),
             ],
+            'locale' => app()->getLocale(),
+            'translations' => Translations::for(),
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
