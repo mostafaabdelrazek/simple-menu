@@ -6,26 +6,24 @@ use Illuminate\Support\Facades\Vite;
  * Resolve an asset URL.
  *
  * In production the document root on the host is the project root (shared
- * hosting), so built assets live under /public instead of /build. This mirrors
- * the custom_asset() helper used by the mitsike project.
+ * hosting), so every asset lives under /public instead of at the root. A
+ * version query param is appended for cache busting.
  */
 function custom_asset(string $path, ?bool $secure = null): string
 {
-    if (app()->environment('production') && ! Vite::isRunningHot()) {
+    if (app()->environment('production')) {
         $path = 'public/'.$path;
     }
 
     $url = asset($path, $secure);
 
+    // While the Vite dev server is running, paths point at the dev server and
+    // must stay byte-for-byte identical or module resolution breaks.
     if (Vite::isRunningHot()) {
         return $url;
     }
 
-    $version = config('app.asset_version');
-
-    if ($version === null) {
-        return $url;
-    }
+    $version = config('app.version', '1.0.0');
 
     // The version must stay free of dots: Vite::isCssPath() only matches a
     // query string that contains none, and a dotted version makes Laravel tag
@@ -36,5 +34,10 @@ function custom_asset(string $path, ?bool $secure = null): string
         return $url;
     }
 
-    return $url.(str_contains($url, '?') ? '&' : '?').'v='.$version;
+    // Append version query param for cache busting
+    if (str_contains($url, '?')) {
+        return $url.'&v='.$version;
+    }
+
+    return $url.'?v='.$version;
 }

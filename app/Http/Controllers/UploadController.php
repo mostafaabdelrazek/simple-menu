@@ -19,7 +19,7 @@ class UploadController extends Controller
         $path = $request->file('file')->store("{$folder}/".mt_rand(2, 9), 'public');
 
         return response()->json([
-            'url' => asset('storage/'.$path),
+            'url' => custom_asset('storage/'.$path),
             'path' => $path,
         ]);
     }

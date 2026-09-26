@@ -30,7 +30,7 @@ class PublicMenuController extends Controller
                             'description' => optional($translation)->description,
                             'price' => $item->price,
                             'discount_price' => $item->discount_price,
-                            'image' => $item->image !== null ? asset('storage/'.$item->image) : null,
+                            'image' => $item->image !== null ? custom_asset('storage/'.$item->image) : null,
                         ];
                     })->values(),
                 ];

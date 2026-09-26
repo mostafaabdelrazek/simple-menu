@@ -56,17 +56,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Asset Version
+    | Application Version
     |--------------------------------------------------------------------------
     |
-    | A version string appended to every Vite-built asset URL (?v=x.x.x). Bump
-    | this value (e.g. in .env) after deploying new compiled assets so that
-    | browsers and proxies are forced to fetch the fresh files instead of a
-    | cached copy.
+    | A version string appended to every asset URL by custom_asset() (?v=x).
+    | Bump this value after deploying new files so browsers and proxies fetch
+    | the fresh copy instead of a cached one.
     |
     */
 
-    'asset_version' => env('ASSET_VERSION'),
+    'version' => env('APP_VERSION', env('ASSET_VERSION', '1.0.0')),
 
     /*
     |--------------------------------------------------------------------------

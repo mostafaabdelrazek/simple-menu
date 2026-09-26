@@ -261,7 +261,7 @@ class RestaurantController extends Controller
         }
 
         return [
-            'url' => asset('storage/'.$path),
+            'url' => custom_asset('storage/'.$path),
             'path' => $path,
         ];
     }

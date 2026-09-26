@@ -21,7 +21,7 @@ class DashboardController extends Controller
                     'id' => $restaurant->id,
                     'slug' => $restaurant->slug,
                     'name' => $restaurant->translation()->name,
-                    'logo' => $restaurant->logo ? asset('storage/'.$restaurant->logo) : null,
+                    'logo' => $restaurant->logo ? custom_asset('storage/'.$restaurant->logo) : null,
                     'profile_url' => route('public.restaurant', $restaurant->slug),
                     'menus' => $restaurant->menus->map(fn ($menu) => [
                         'id' => $menu->id,
