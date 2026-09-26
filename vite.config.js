@@ -12,6 +12,17 @@ export default defineConfig({
         tailwindcss(),
         react(),
     ],
+    build: {
+        rolldownOptions: {
+            output: {
+                advancedChunks: {
+                    groups: [
+                        { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
+                    ],
+                },
+            },
+        },
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],

@@ -1,108 +1,92 @@
-import { Link, usePage } from '@inertiajs/react';
-import { ArrowRight, Globe2, MenuSquare, QrCode, UtensilsCrossed } from 'lucide-react';
-import GoogleIcon from '../components/GoogleIcon';
+import { Head } from '@inertiajs/react';
+import ExampleMenu from '../components/landing/ExampleMenu';
+import Faq from '../components/landing/Faq';
+import FeatureStrip from '../components/landing/FeatureStrip';
+import FinalCta from '../components/landing/FinalCta';
+import FreeSection from '../components/landing/FreeSection';
+import Hero from '../components/landing/Hero';
+import HowItWorks from '../components/landing/HowItWorks';
+import LanguageShowcase from '../components/landing/LanguageShowcase';
+import LandingFooter from '../components/landing/LandingFooter';
+import LandingNav from '../components/landing/LandingNav';
+import ProblemSection from '../components/landing/ProblemSection';
+import QrSection from '../components/landing/QrSection';
+import WhoSection from '../components/landing/WhoSection';
+import { landingCopy } from '../lib/landingCopy';
+import { LOCALES } from '../lib/constants';
 
-export default function Home() {
-    const { auth } = usePage().props;
+export default function Home({ locale = 'en', cta_url: ctaUrl, languages, example_menu_url: exampleUrl }) {
+    const active = languages?.length ? languages : ['ar', 'en', 'fr'];
+    const resolved = LOCALES[locale] ? locale : 'en';
+    const copy = landingCopy(resolved);
+    const rtl = resolved === 'ar';
+    const url = exampleUrl ?? window.location.origin;
 
     return (
-        <div className="min-h-screen bg-stone-50">
-            <header className="border-b border-stone-200 bg-white/80 backdrop-blur">
-                <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                    <div className="flex items-center gap-2 font-semibold text-stone-900">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500 text-white">
-                            <UtensilsCrossed className="h-5 w-5" />
-                        </span>
-                        SimpleMenu
-                    </div>
-                    <nav className="flex items-center gap-3 text-sm">
-                        {auth?.user ? (
-                            <Link
-                                href="/dashboard"
-                                className="inline-flex items-center gap-1 rounded-md bg-amber-500 px-4 py-2 font-medium text-white hover:bg-amber-600"
-                            >
-                                Go to dashboard
-                                <ArrowRight className="h-4 w-4" />
-                            </Link>
-                        ) : (
-                            <>
-                                <a
-                                    href="/admin/login"
-                                    className="hidden rounded-md px-3 py-2 text-stone-500 hover:text-stone-900 sm:block"
-                                >
-                                    Admin
-                                </a>
-                                <a
-                                    href="/auth/google"
-                                    className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-4 py-2 font-medium text-white hover:bg-stone-800"
-                                >
-                                    <GoogleIcon className="h-4 w-4 rounded-full bg-white" />
-                                    Sign in with Google
-                                </a>
-                            </>
-                        )}
-                    </nav>
-                </div>
-            </header>
+        <div dir={rtl ? 'rtl' : 'ltr'} className="bg-stone-50 font-sans text-stone-900 antialiased">
+            <Head>
+                <title>{copy.meta.title}</title>
+                <meta name="description" content={copy.meta.description} />
+                <link rel="canonical" href={window.location.origin} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content="SimpleMenu" />
+                <meta property="og:title" content={copy.meta.title} />
+                <meta property="og:description" content={copy.meta.description} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={copy.meta.title} />
+                <meta name="twitter:description" content={copy.meta.description} />
+                <meta name="theme-color" content="#fafaf9" />
+            </Head>
 
-            <section className="mx-auto max-w-6xl px-4 py-20 text-center">
-                <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight text-stone-900 sm:text-6xl">
-                    Create a digital menu in minutes
-                </h1>
-                <p className="mx-auto mt-4 max-w-2xl text-lg text-stone-600">
-                    Build a beautiful multilingual restaurant profile and menu, then share a single link with your
-                    customers.
-                </p>
-                <div className="mt-8 flex justify-center">
-                    {auth?.user ? (
-                        <Link
-                            href="/dashboard"
-                            className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-6 py-3 font-semibold text-white hover:bg-amber-600"
-                        >
-                            Start creating
-                            <ArrowRight className="h-5 w-5" />
-                        </Link>
-                    ) : (
-                        <a
-                            href="/auth/google"
-                            className="inline-flex items-center gap-2 rounded-lg bg-stone-900 px-6 py-3 font-semibold text-white hover:bg-stone-800"
-                        >
-                            <GoogleIcon className="h-5 w-5 rounded-full bg-white" />
-                            Sign in with Google
-                        </a>
-                    )}
-                </div>
-            </section>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'WebApplication',
+                        name: 'SimpleMenu',
+                        url: window.location.origin,
+                        applicationCategory: 'BusinessApplication',
+                        operatingSystem: 'Any',
+                        description: copy.meta.description,
+                        inLanguage: active,
+                        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+                    }),
+                }}
+            />
 
-            <section className="mx-auto max-w-6xl px-4 pb-20">
-                <div className="grid gap-6 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-stone-200 bg-white p-6">
-                        <Globe2 className="h-8 w-8 text-amber-500" />
-                        <h3 className="mt-4 font-semibold text-stone-900">Multilingual by default</h3>
-                        <p className="mt-1 text-sm text-stone-600">
-                            Offer your menu in Arabic, English, and French. Visitors pick their language automatically.
-                        </p>
-                    </div>
-                    <div className="rounded-2xl border border-stone-200 bg-white p-6">
-                        <MenuSquare className="h-8 w-8 text-amber-500" />
-                        <h3 className="mt-4 font-semibold text-stone-900">Categories & items</h3>
-                        <p className="mt-1 text-sm text-stone-600">
-                            Organize items into categories, set prices and discounts, and attach photos.
-                        </p>
-                    </div>
-                    <div className="rounded-2xl border border-stone-200 bg-white p-6">
-                        <QrCode className="h-8 w-8 text-amber-500" />
-                        <h3 className="mt-4 font-semibold text-stone-900">One link, everything</h3>
-                        <p className="mt-1 text-sm text-stone-600">
-                            Share your restaurant profile and menu links anywhere — no app required.
-                        </p>
-                    </div>
-                </div>
-            </section>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'FAQPage',
+                        mainEntity: copy.faq.items.map((item) => ({
+                            '@type': 'Question',
+                            name: item.q,
+                            acceptedAnswer: { '@type': 'Answer', text: item.a },
+                        })),
+                    }),
+                }}
+            />
 
-            <footer className="border-t border-stone-200 py-8 text-center text-sm text-stone-500">
-                © {new Date().getFullYear()} SimpleMenu
-            </footer>
+            <LandingNav copy={copy} ctaUrl={ctaUrl} locale={resolved} languages={active} rtl={rtl} />
+
+            <main>
+                <Hero copy={copy} ctaUrl={ctaUrl} exampleUrl={exampleUrl} locale={resolved} rtl={rtl} />
+                <FeatureStrip copy={copy} />
+                <ProblemSection copy={copy} />
+                <HowItWorks copy={copy} ctaUrl={ctaUrl} rtl={rtl} />
+                <LanguageShowcase copy={copy} locale={resolved} />
+                <QrSection copy={copy} exampleUrl={exampleUrl} />
+                <FreeSection copy={copy} ctaUrl={ctaUrl} rtl={rtl} />
+                <WhoSection copy={copy} />
+                <ExampleMenu copy={copy} exampleUrl={exampleUrl} locale={resolved} rtl={rtl} />
+                <Faq copy={copy} />
+                <FinalCta copy={copy} ctaUrl={ctaUrl} rtl={rtl} />
+            </main>
+
+            <LandingFooter copy={copy} locale={resolved} languages={active} />
         </div>
     );
 }

@@ -22,7 +22,38 @@ class PublicPagesTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page->component('Home'));
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Home')
+                ->where('locale', 'en')
+                ->where('languages', ['en', 'ar', 'fr'])
+                ->where('cta_url', route('auth.google'))
+                ->where('example_menu_url', url('/m/menu-golden-cairo-grill')));
+    }
+
+    public function test_home_page_localises_from_the_lang_parameter(): void
+    {
+        $this->get('/?lang=ar')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('locale', 'ar')
+                ->where('cta_url', route('auth.google')));
+    }
+
+    public function test_home_page_sends_authenticated_visitors_to_their_next_step(): void
+    {
+        $user = User::factory()->phoneVerified()->create();
+
+        $this->actingAs($user)
+            ->get('/')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page->where('cta_url', route('restaurants.create')));
+
+        Restaurant::factory()->for($user, 'owner')->create();
+
+        $this->actingAs($user)
+            ->get('/')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page->where('cta_url', route('dashboard')));
     }
 
     public function test_public_restaurant_page_renders_with_content(): void

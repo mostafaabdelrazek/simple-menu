@@ -1,6 +1,175 @@
 {
+  "_AdminLayout-ClWBV_em.js": {
+    "file": "assets/AdminLayout-ClWBV_em.js",
+    "name": "AdminLayout",
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_log-out-BVTM-KMO.js",
+      "_store-CFLTZNbB.js",
+      "_utensils-crossed-CimMmM62.js"
+    ]
+  },
+  "_AppShell-BXxdrX21.js": {
+    "file": "assets/AppShell-BXxdrX21.js",
+    "name": "AppShell",
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_log-out-BVTM-KMO.js",
+      "_utensils-crossed-CimMmM62.js"
+    ]
+  },
+  "_CopyButton-YpTZCqvq.js": {
+    "file": "assets/CopyButton-YpTZCqvq.js",
+    "name": "CopyButton",
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js",
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_FlashMessage-DvFsrSam.js": {
+    "file": "assets/FlashMessage-DvFsrSam.js",
+    "name": "FlashMessage",
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_circle-check-CkBcGClv.js"
+    ]
+  },
+  "_LanguageSwitcher-DX3PsyVS.js": {
+    "file": "assets/LanguageSwitcher-DX3PsyVS.js",
+    "name": "LanguageSwitcher",
+    "imports": [
+      "_react-Bmls18qL.js",
+      "_earth-Dsqa9-F4.js",
+      "_constants-D3rTFgEQ.js"
+    ]
+  },
+  "_Pagination-Ciz4Gke4.js": {
+    "file": "assets/Pagination-Ciz4Gke4.js",
+    "name": "Pagination",
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_QrCode-B5MNHbgU.js": {
+    "file": "assets/QrCode-B5MNHbgU.js",
+    "name": "QrCode",
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js"
+    ]
+  },
+  "_SocialIcon-53zwHgub.js": {
+    "file": "assets/SocialIcon-53zwHgub.js",
+    "name": "SocialIcon",
+    "imports": [
+      "_react-Bmls18qL.js",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_earth-Dsqa9-F4.js"
+    ]
+  },
+  "_arrow-left-DV3Tp93u.js": {
+    "file": "assets/arrow-left-DV3Tp93u.js",
+    "name": "arrow-left",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_arrow-right-DMFZBa3e.js": {
+    "file": "assets/arrow-right-DMFZBa3e.js",
+    "name": "arrow-right",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_circle-check-CkBcGClv.js": {
+    "file": "assets/circle-check-CkBcGClv.js",
+    "name": "circle-check",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_constants-D3rTFgEQ.js": {
+    "file": "assets/constants-D3rTFgEQ.js",
+    "name": "constants"
+  },
+  "_createLucideIcon-BtxaUrHf.js": {
+    "file": "assets/createLucideIcon-BtxaUrHf.js",
+    "name": "createLucideIcon",
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js"
+    ]
+  },
+  "_earth-Dsqa9-F4.js": {
+    "file": "assets/earth-Dsqa9-F4.js",
+    "name": "earth",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_log-out-BVTM-KMO.js": {
+    "file": "assets/log-out-BVTM-KMO.js",
+    "name": "log-out",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_plus-Cz0GwN3Z.js": {
+    "file": "assets/plus-Cz0GwN3Z.js",
+    "name": "plus",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_react-Bmls18qL.js": {
+    "file": "assets/react-Bmls18qL.js",
+    "name": "react",
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js"
+    ]
+  },
+  "_rolldown-runtime-CbXtAM7H.js": {
+    "file": "assets/rolldown-runtime-CbXtAM7H.js",
+    "name": "rolldown-runtime"
+  },
+  "_shield-check-CA4pGTLv.js": {
+    "file": "assets/shield-check-CA4pGTLv.js",
+    "name": "shield-check",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_store-CFLTZNbB.js": {
+    "file": "assets/store-CFLTZNbB.js",
+    "name": "store",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_utensils-crossed-CimMmM62.js": {
+    "file": "assets/utensils-crossed-CimMmM62.js",
+    "name": "utensils-crossed",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
+  "_x-DZA6TOm9.js": {
+    "file": "assets/x-DZA6TOm9.js",
+    "name": "x",
+    "imports": [
+      "_createLucideIcon-BtxaUrHf.js"
+    ]
+  },
   "resources/css/app.css": {
-    "file": "assets/app-CSQer3Z7.css",
+    "file": "assets/app-C2dF8JCm.css",
     "name": "app",
     "names": [
       "app.css"
@@ -9,9 +178,231 @@
     "isEntry": true
   },
   "resources/js/app.jsx": {
-    "file": "assets/app-Cf6KzML_.js",
+    "file": "assets/app-C4a_mbRi.js",
     "name": "app",
     "src": "resources/js/app.jsx",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js"
+    ],
+    "dynamicImports": [
+      "resources/js/pages/Admin/Dashboard.jsx",
+      "resources/js/pages/Admin/Login.jsx",
+      "resources/js/pages/Admin/Menus.jsx",
+      "resources/js/pages/Admin/Restaurants.jsx",
+      "resources/js/pages/Admin/Users.jsx",
+      "resources/js/pages/Auth/Login.jsx",
+      "resources/js/pages/Dashboard/Index.jsx",
+      "resources/js/pages/Home.jsx",
+      "resources/js/pages/Onboarding/Phone.jsx",
+      "resources/js/pages/Onboarding/Verify.jsx",
+      "resources/js/pages/Public/Menu.jsx",
+      "resources/js/pages/Public/Restaurant.jsx",
+      "resources/js/pages/Restaurant/Complete.jsx",
+      "resources/js/pages/Restaurant/Wizard.jsx"
+    ]
+  },
+  "resources/js/pages/Admin/Dashboard.jsx": {
+    "file": "assets/Dashboard-BHaigoga.js",
+    "name": "Dashboard",
+    "src": "resources/js/pages/Admin/Dashboard.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_AdminLayout-ClWBV_em.js",
+      "_store-CFLTZNbB.js"
+    ]
+  },
+  "resources/js/pages/Admin/Login.jsx": {
+    "file": "assets/Login-DHMaetR2.js",
+    "name": "Login",
+    "src": "resources/js/pages/Admin/Login.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_shield-check-CA4pGTLv.js"
+    ]
+  },
+  "resources/js/pages/Admin/Menus.jsx": {
+    "file": "assets/Menus-CgFOfmLz.js",
+    "name": "Menus",
+    "src": "resources/js/pages/Admin/Menus.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_Pagination-Ciz4Gke4.js",
+      "_AdminLayout-ClWBV_em.js"
+    ]
+  },
+  "resources/js/pages/Admin/Restaurants.jsx": {
+    "file": "assets/Restaurants-ewZHtozC.js",
+    "name": "Restaurants",
+    "src": "resources/js/pages/Admin/Restaurants.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_Pagination-Ciz4Gke4.js",
+      "_AdminLayout-ClWBV_em.js"
+    ]
+  },
+  "resources/js/pages/Admin/Users.jsx": {
+    "file": "assets/Users-Cl6EDdqR.js",
+    "name": "Users",
+    "src": "resources/js/pages/Admin/Users.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_Pagination-Ciz4Gke4.js",
+      "_AdminLayout-ClWBV_em.js"
+    ]
+  },
+  "resources/js/pages/Auth/Login.jsx": {
+    "file": "assets/Login-CA_YYr3V.js",
+    "name": "Login",
+    "src": "resources/js/pages/Auth/Login.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_arrow-left-DV3Tp93u.js",
+      "_FlashMessage-DvFsrSam.js",
+      "_utensils-crossed-CimMmM62.js"
+    ]
+  },
+  "resources/js/pages/Dashboard/Index.jsx": {
+    "file": "assets/Index-DVy6GNIG.js",
+    "name": "Index",
+    "src": "resources/js/pages/Dashboard/Index.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_FlashMessage-DvFsrSam.js",
+      "_CopyButton-YpTZCqvq.js",
+      "_plus-Cz0GwN3Z.js",
+      "_store-CFLTZNbB.js",
+      "_AppShell-BXxdrX21.js"
+    ]
+  },
+  "resources/js/pages/Home.jsx": {
+    "file": "assets/Home-D12UnKPf.js",
+    "name": "Home",
+    "src": "resources/js/pages/Home.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_arrow-right-DMFZBa3e.js",
+      "_x-DZA6TOm9.js",
+      "_earth-Dsqa9-F4.js",
+      "_plus-Cz0GwN3Z.js",
+      "_store-CFLTZNbB.js",
+      "_utensils-crossed-CimMmM62.js",
+      "_constants-D3rTFgEQ.js",
+      "_QrCode-B5MNHbgU.js"
+    ]
+  },
+  "resources/js/pages/Onboarding/Phone.jsx": {
+    "file": "assets/Phone-CXc5waCj.js",
+    "name": "Phone",
+    "src": "resources/js/pages/Onboarding/Phone.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_FlashMessage-DvFsrSam.js",
+      "_shield-check-CA4pGTLv.js",
+      "_utensils-crossed-CimMmM62.js",
+      "_constants-D3rTFgEQ.js"
+    ]
+  },
+  "resources/js/pages/Onboarding/Verify.jsx": {
+    "file": "assets/Verify-DTQJgrFq.js",
+    "name": "Verify",
+    "src": "resources/js/pages/Onboarding/Verify.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_FlashMessage-DvFsrSam.js"
+    ]
+  },
+  "resources/js/pages/Public/Menu.jsx": {
+    "file": "assets/Menu-CEAcgmRx.js",
+    "name": "Menu",
+    "src": "resources/js/pages/Public/Menu.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_utensils-crossed-CimMmM62.js",
+      "_LanguageSwitcher-DX3PsyVS.js"
+    ]
+  },
+  "resources/js/pages/Public/Restaurant.jsx": {
+    "file": "assets/Restaurant-DlUhBdS0.js",
+    "name": "Restaurant",
+    "src": "resources/js/pages/Public/Restaurant.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_arrow-right-DMFZBa3e.js",
+      "_SocialIcon-53zwHgub.js",
+      "_utensils-crossed-CimMmM62.js",
+      "_LanguageSwitcher-DX3PsyVS.js"
+    ]
+  },
+  "resources/js/pages/Restaurant/Complete.jsx": {
+    "file": "assets/Complete-DOfDlLzL.js",
+    "name": "Complete",
+    "src": "resources/js/pages/Restaurant/Complete.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_circle-check-CkBcGClv.js",
+      "_CopyButton-YpTZCqvq.js",
+      "_utensils-crossed-CimMmM62.js",
+      "_AppShell-BXxdrX21.js",
+      "_QrCode-B5MNHbgU.js"
+    ]
+  },
+  "resources/js/pages/Restaurant/Wizard.jsx": {
+    "file": "assets/Wizard-0J-Bn2Tp.js",
+    "name": "Wizard",
+    "src": "resources/js/pages/Restaurant/Wizard.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CbXtAM7H.js",
+      "_react-Bmls18qL.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon-BtxaUrHf.js",
+      "_arrow-left-DV3Tp93u.js",
+      "_arrow-right-DMFZBa3e.js",
+      "_x-DZA6TOm9.js",
+      "_FlashMessage-DvFsrSam.js",
+      "_earth-Dsqa9-F4.js",
+      "_SocialIcon-53zwHgub.js",
+      "_plus-Cz0GwN3Z.js",
+      "_utensils-crossed-CimMmM62.js",
+      "_AppShell-BXxdrX21.js",
+      "_constants-D3rTFgEQ.js"
+    ]
   }
 }

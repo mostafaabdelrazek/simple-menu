@@ -4,6 +4,48 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        'Instrument Sans', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: 'Instrument Serif', 'IBM Plex Sans Arabic', ui-serif, Georgia, Cambria, serif;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+}
+
+/*
+ * Scroll reveals. Elements start visible and only animate once the visitor
+ * shows no objection to motion, so content never disappears when JavaScript or
+ * IntersectionObserver is unavailable.
+ */
+@layer utilities {
+    .reveal-ready [data-reveal] {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+            opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    .reveal-ready [data-reveal='shown'] {
+        opacity: 1;
+        transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .reveal-ready [data-reveal] {
+            opacity: 1;
+            transform: none;
+        }
+    }
 }
