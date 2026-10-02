@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\GoogleProvider;
 use Laravel\Socialite\Two\User as SocialiteUser;
@@ -63,5 +64,14 @@ class GoogleAuthTest extends TestCase
     {
         $this->get(route('auth.google.callback', ['error' => 'access_denied']))
             ->assertRedirect(route('login'));
+    }
+
+    public function test_login_page_is_reachable_and_offers_google(): void
+    {
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/Login')
+                ->where('demo_login_available', config('app.debug')));
     }
 }

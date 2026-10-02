@@ -16,10 +16,9 @@
     "pagination.next": "التالي",
 
     "auth.title": "تسجيل الدخول",
-    "auth.subtitle": "سجّل الدخول لبدء إنشاء قائمتك.",
+    "auth.subtitle": "سجّل الدخول أو أنشئ حسابك لبدء بناء قائمتك.",
     "auth.continue_google": "المتابعة باستخدام Google",
-    "auth.or": "أو",
-    "auth.login": "تسجيل الدخول",
+    "auth.google_hint": "جديد هنا؟ حسابك يُنشأ تلقائياً عبر Google — بدون كلمة مرور.",
     "auth.dev_login": "دخول تجريبي — سجّل الدخول كمستخدم تجريبي",
     "auth.back_home": "العودة إلى الرئيسية",
     "auth.go_to_dashboard": "الذهاب إلى لوحة التحكم ←",

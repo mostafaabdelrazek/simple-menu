@@ -26,7 +26,7 @@ class PublicPagesTest extends TestCase
                 ->component('Home')
                 ->where('locale', 'en')
                 ->where('languages', ['en', 'ar', 'fr'])
-                ->where('cta_url', route('auth.google'))
+                ->where('cta_url', route('login'))
                 ->where('example_menu_url', url('/m/menu-golden-cairo-grill')));
     }
 
@@ -36,7 +36,7 @@ class PublicPagesTest extends TestCase
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->where('locale', 'ar')
-                ->where('cta_url', route('auth.google')));
+                ->where('cta_url', route('login')));
     }
 
     public function test_home_page_sends_authenticated_visitors_to_their_next_step(): void

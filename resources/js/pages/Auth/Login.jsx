@@ -41,24 +41,15 @@ export default function Login() {
                 <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
                     <a
                         href="/auth/google"
-                        className="flex w-full items-center justify-center gap-3 rounded-lg border border-stone-300 bg-white px-4 py-3 font-medium text-stone-800 hover:bg-stone-50"
+                        className="flex w-full items-center justify-center gap-3 rounded-lg bg-stone-900 px-4 py-3 font-medium text-white hover:bg-stone-800"
                     >
                         <GoogleIcon className="h-5 w-5" />
                         {t('auth.continue_google')}
                     </a>
 
-                    <div className="my-4 flex items-center gap-3 text-xs text-stone-400">
-                        <span className="h-px flex-1 bg-stone-200" />
-                        {t('auth.or')}
-                        <span className="h-px flex-1 bg-stone-200" />
-                    </div>
-
-                    <a
-                        href="/auth/google"
-                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-stone-900 px-4 py-3 font-medium text-white hover:bg-stone-800"
-                    >
-                        {t('auth.login')}
-                    </a>
+                    <p className="mt-3 text-center text-xs text-stone-500">
+                        {t('auth.google_hint')}
+                    </p>
 
                     {demo_login_available && (
                         <Link

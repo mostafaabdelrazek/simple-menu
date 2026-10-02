@@ -16,10 +16,9 @@
     "pagination.next": "Next",
 
     "auth.title": "Sign in",
-    "auth.subtitle": "Sign in to start creating your menu.",
+    "auth.subtitle": "Sign in or create an account to start building your menu.",
     "auth.continue_google": "Continue with Google",
-    "auth.or": "or",
-    "auth.login": "Login",
+    "auth.google_hint": "New here? Google creates your account for you — no password needed.",
     "auth.dev_login": "Dev login — sign in as demo user",
     "auth.back_home": "Back to home",
     "auth.go_to_dashboard": "Go to dashboard →",

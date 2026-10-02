@@ -19,7 +19,8 @@ const SIZES = {
  * The landing page call to action.
  *
  * `href` pointing at the Google sign-in flow renders a plain anchor so the
- * redirect leaves the single page app; everything else stays a client visit.
+ * redirect leaves the single page app; the sign-in page itself and every other
+ * destination stay client visits.
  */
 export default function Cta({ href, children, variant = 'primary', size = 'lg', rtl = false, className = '', icon = true }) {
     const classes = `group inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 ${

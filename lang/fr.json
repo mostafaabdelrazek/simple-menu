@@ -16,10 +16,9 @@
     "pagination.next": "Suivant",
 
     "auth.title": "Connexion",
-    "auth.subtitle": "Connectez-vous pour commencer à créer votre menu.",
+    "auth.subtitle": "Connectez-vous ou créez un compte pour commencer à créer votre menu.",
     "auth.continue_google": "Continuer avec Google",
-    "auth.or": "ou",
-    "auth.login": "Connexion",
+    "auth.google_hint": "Nouveau ici ? Google crée votre compte automatiquement — aucun mot de passe requis.",
     "auth.dev_login": "Connexion démo — entrer comme utilisateur de démonstration",
     "auth.back_home": "Retour à l'accueil",
     "auth.go_to_dashboard": "Aller au tableau de bord →",

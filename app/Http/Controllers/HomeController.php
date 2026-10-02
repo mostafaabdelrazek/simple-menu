@@ -40,7 +40,7 @@ class HomeController extends Controller
     private function ctaUrl(Request $request): string
     {
         if (! $request->user()) {
-            return route('auth.google');
+            return route('login');
         }
 
         return $request->user()->restaurants()->exists()

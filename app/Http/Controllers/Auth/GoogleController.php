@@ -49,11 +49,11 @@ class GoogleController extends Controller
 
         Auth::guard('web')->login($user);
 
+        $request->session()->regenerate();
+
         if (! $user->hasVerifiedPhone()) {
             return redirect()->route('onboarding.phone');
         }
-
-        $request->session()->regenerate();
 
         return redirect()->route('dashboard');
     }
