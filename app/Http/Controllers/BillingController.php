@@ -63,7 +63,7 @@ class BillingController extends Controller
     /**
      * Start an upgrade to the posted plan.
      */
-    public function checkout(Request $request): RedirectResponse
+    public function checkout(Request $request): RedirectResponse|\Inertia\Response
     {
         $planSlug = (string) $request->validate(['plan' => ['required', 'string']])['plan'];
         $plan = BillingManager::plan($planSlug);
@@ -80,7 +80,10 @@ class BillingController extends Controller
         }
 
         if ((string) config('billing.driver', 'none') !== 'none') {
-            return redirect()->away(BillingManager::startCheckout($user, $plan));
+            // External (Paymob) redirects must be issued as a full-page
+            // visit: an Inertia XHR 302 would be followed by the browser and
+            // blocked by Paymob's CORS policy on the XSRF token header.
+            return Inertia::location(BillingManager::startCheckout($user, $plan));
         }
 
         // No gateway configured (local / staging): put the account on a trial
