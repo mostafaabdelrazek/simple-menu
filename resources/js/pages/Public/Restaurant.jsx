@@ -5,7 +5,7 @@ import SocialIcon from '../../components/SocialIcon';
 import { useI18n } from '../../lib/i18n';
 import { menuThemeStyle } from '../../lib/menuTheme';
 
-export default function Restaurant({ locale, ui_locale: uiLocale = 'en', languages, restaurant, menus, theme }) {
+export default function Restaurant({ locale, ui_locale: uiLocale = 'en', languages, restaurant, menus, theme, branding = true }) {
     // `locale` is the language the restaurant content is written in; `ui_locale`
     // is what the visitor asked for, and it owns the writing direction.
     const rtl = uiLocale === 'ar';
@@ -147,7 +147,15 @@ export default function Restaurant({ locale, ui_locale: uiLocale = 'en', languag
             </main>
 
             <footer className="pb-10 text-center text-xs text-[var(--menu-faint)]">
-                {t('public.powered_by')} <span className="text-[var(--menu-muted)]">{restaurant.name}</span>
+                {branding ? (
+                    <>
+                        {t('public.powered_by')}
+                        {' '}
+                        <span className="text-[var(--menu-muted)]">SimpleMenu</span>
+                    </>
+                ) : (
+                    <span className="text-[var(--menu-muted)]">{restaurant.name}</span>
+                )}
             </footer>
         </div>
     );

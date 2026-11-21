@@ -7,13 +7,14 @@
 export const LANDING_COPY = {
     en: {
         meta: {
-            title: 'Free Digital Menu with QR Code for Restaurants',
+            title: 'Digital Menu with QR Code for Restaurants',
             description:
-                'Create a free digital menu for your restaurant or café in Arabic, English and French, then share it with one QR code. No subscription, no app for your guests.',
+                'Create a digital menu for your restaurant or café in Arabic, English and French, then share it with one QR code. A free plan to start — your guests need no app.',
         },
         nav: {
             how: 'How It Works',
             features: 'Features',
+            pricing: 'Pricing',
             faq: 'FAQ',
             cta: 'Create Free Menu',
             menu: 'Menu',
@@ -21,14 +22,14 @@ export const LANDING_COPY = {
             language: 'Language',
         },
         hero: {
-            badge: 'FREE DIGITAL MENU FOR RESTAURANTS',
+            badge: 'DIGITAL MENUS WITH QR CODE',
             accent: 'Every Language.',
             title: 'One Menu. Every Language. One QR Code.',
             subtitle:
                 'Create a professional digital menu for your restaurant or café, offer it in Arabic, English and French, and let your guests open it on their phone by scanning one QR code.',
             primary: 'Create Your Free Menu',
             secondary: 'See How It Works',
-            note: 'Completely free. No subscription. Your guests need no app.',
+            note: 'Start free. Upgrade only when you outgrow it. Your guests need no app.',
         },
         features: {
             title: 'Three things, done properly',
@@ -42,8 +43,8 @@ export const LANDING_COPY = {
                     text: 'A single code opens your menu on any phone. Print it for tables, the counter or receipts.',
                 },
                 {
-                    title: 'Free, and it stays free',
-                    text: 'Build the menu, publish it, share the code. There is no monthly fee and no paid plan.',
+                    title: 'Free to start',
+                    text: 'Build the menu, publish it, share the code on the free plan. Upgrade to Pro when your business grows.',
                 },
             ],
         },
@@ -115,17 +116,39 @@ export const LANDING_COPY = {
             scanned: 'Menu opened',
             scanCaption: 'Scan to open the menu',
         },
-        free: {
+        pricing: {
             eyebrow: 'Pricing',
-            title: "Yes. It's Free.",
-            text: 'Create your digital restaurant menu and generate your QR code without paying a subscription.',
-            points: [
-                { title: 'No monthly fee', text: 'Nothing to cancel, nothing to renew.' },
-                { title: 'Nothing to set up', text: 'No designer, no printing budget, no agency.' },
-                { title: 'Every menu is included', text: 'Add another menu or another language whenever you need one.' },
-            ],
-            cta: 'Create Your Free Menu',
-            footnote: 'That is the whole product: your menu, your languages, your QR code. Free.',
+            title: 'Free to Start. Fair When You Grow.',
+            subtitle: 'One account, one dashboard — plans that match how many menus you actually run.',
+            cards: {
+                free: {
+                    name: 'Free',
+                    price: 'Free forever plan',
+                    bullets: [
+                        '1 restaurant and 1 menu',
+                        'Up to 20 items per menu',
+                        'Arabic, English and French',
+                        'QR code + printable table cards',
+                        'SimpleMenu branding on your menu',
+                    ],
+                    cta: 'Create Your Free Menu',
+                },
+                pro: {
+                    name: 'Pro',
+                    price: 'EGP 199 / month',
+                    badge: 'Most popular',
+                    bullets: [
+                        'Up to 3 restaurants',
+                        'Unlimited items per menu',
+                        'Arabic, English and French',
+                        'QR code + printable table cards',
+                        'No SimpleMenu branding',
+                        'Priority support',
+                    ],
+                    cta: 'Upgrade to Pro',
+                },
+            },
+            footnote: 'Start free — no card required. Pro is billed monthly and you can cancel anytime.',
         },
         who: {
             eyebrow: 'Who is it for',
@@ -154,7 +177,7 @@ export const LANDING_COPY = {
             items: [
                 {
                     q: 'Is the digital menu really free?',
-                    a: 'Yes. You can create your digital menu and your QR code for free, with no subscription to pay for later.',
+                    a: 'Yes. You can create your digital menu and your QR code on the free plan. Pro adds more restaurants, unlimited items and removes the SimpleMenu branding when you need it.',
                 },
                 {
                     q: 'Can my menu support multiple languages?',
@@ -181,11 +204,11 @@ export const LANDING_COPY = {
         final: {
             title: 'Your Menu Is Ready for the QR Era.',
             text: 'Create your digital menu, make it available in multiple languages, and share it with one QR code.',
-            note: "It's free.",
+            note: 'Start free.',
             cta: 'Create Your Free Menu',
         },
         footer: {
-            tagline: 'A free digital menu and QR code for restaurants, cafés and food businesses.',
+            tagline: 'A digital menu and QR code for restaurants, cafés and food businesses.',
             product: 'Product',
             help: 'Help',
             how: 'How It Works',
@@ -200,11 +223,12 @@ export const LANDING_COPY = {
         meta: {
             title: 'منيو إلكتروني مجاني بكود QR للمطاعم والمقاهي',
             description:
-                'أنشئ منيو إلكتروني مجاني لمطعمك أو مقهيك بالعربية والإنجليزية والفرنسية، وشاركه بكود QR واحد. بدون اشتراك، وبدون تطبيق للضيوف.',
+                'أنشئ منيو إلكتروني لمطعمك أو مقهيك بالعربية والإنجليزية والفرنسية، وشاركه بكود QR واحد. باقة مجانية للبداية، وبدون تطبيق للضيوف.',
         },
         nav: {
             how: 'كيف يعمل',
             features: 'المميزات',
+            pricing: 'الأسعار',
             faq: 'الأسئلة الشائعة',
             cta: 'أنشئ منيو مجاناً',
             menu: 'القائمة',
@@ -212,14 +236,14 @@ export const LANDING_COPY = {
             language: 'اللغة',
         },
         hero: {
-            badge: 'منيو إلكتروني مجاني للمطاعم والمقاهي',
+            badge: 'قوائم إلكترونية بكود QR للمطاعم والمقاهي',
             accent: 'كل اللغات.',
             title: 'منيو واحد. كل اللغات. كود QR واحد.',
             subtitle:
                 'أنشئ منيو إلكتروني احترافي لمطعمك أو مقهيك، اعرضه بالعربية والإنجليزية والفرنسية، ودع ضيوفك يفتحونه على جوّالهم بمسح كود QR واحد.',
             primary: 'ابدأ منيو مجاناً',
             secondary: 'كيف يعمل',
-            note: 'مجاني بالكامل. بدون اشتراك. وضيوفك لا يحتاجون تطبيق.',
+            note: 'ابدأ مجاناً. قم بالترقية فقط عندما تحتاج المزيد، وضيوفك لا يحتاجون تطبيق.',
         },
         features: {
             title: 'ثلاثة أشياء، مُحكمة',
@@ -233,8 +257,8 @@ export const LANDING_COPY = {
                     text: 'كود واحد يفتح قائمتك على أي جوّال. اطبعه للطاولات أو الكاشير أو الفواتير.',
                 },
                 {
-                    title: 'مجاني، ويظل مجانياً',
-                    text: 'أنشئ القائمة، انشرها، وشارك الكود. بدون رسوم شهرية وبدون باقات مدفوعة.',
+                    title: 'ابدأ مجاناً',
+                    text: 'أنشئ القائمة، انشرها، وشارك الكود مجاناً. قم بالترقية إلى Pro عندما يكبر مشروعك.',
                 },
             ],
         },
@@ -304,17 +328,39 @@ export const LANDING_COPY = {
             scanned: 'تم فتح القائمة',
             scanCaption: 'امسح الكود لفتح القائمة',
         },
-        free: {
-            eyebrow: 'السعر',
-            title: 'نعم، مجاني.',
-            text: 'أنشئ منيو مطعمك الرقمي وولّد كود QR بدون أي اشتراك مدفوع.',
-            points: [
-                { title: 'بدون رسوم شهرية', text: 'لا شيء لإلغائه ولا شيء لتجديده.' },
-                { title: 'بدون تكلفة إعداد', text: 'لا مصمم، ولا ميزانية طباعة، ولا وكالة.' },
-                { title: 'كل القوائم مشمولة', text: 'أضف قائمة أخرى أو لغة أخرى وقتما تحتاجها.' },
-            ],
-            cta: 'ابدأ منيو مجاناً',
-            footnote: 'هذا كل المنتج: قائمتك، لغاتك، وكود QR. مجاناً.',
+        pricing: {
+            eyebrow: 'الأسعار',
+            title: 'ابدأ مجاناً. وبسقف عادل عند النمو.',
+            subtitle: 'حساب واحد، لوحة واحدة — باقات تناسب عدد القوائم التي تديرها فعلاً.',
+            cards: {
+                free: {
+                    name: 'مجاني',
+                    price: 'باقة مجانية للأبد',
+                    bullets: [
+                        'مطعم واحد وقائمة واحدة',
+                        'حتى 20 صنفاً في القائمة',
+                        'العربية والإنجليزية والفرنسية',
+                        'كود QR وبطاقات طاولات قابلة للطباعة',
+                        'شعار SimpleMenu على القائمة',
+                    ],
+                    cta: 'ابدأ منيو مجاناً',
+                },
+                pro: {
+                    name: 'Pro',
+                    price: '199 ج.م / شهر',
+                    badge: 'الأكثر اختياراً',
+                    bullets: [
+                        'حتى 3 مطاعم',
+                        'أصناف بلا حدود',
+                        'العربية والإنجليزية والفرنسية',
+                        'كود QR وبطاقات طاولات قابلة للطباعة',
+                        'بدون شعار SimpleMenu',
+                        'دعم ذو أولوية',
+                    ],
+                    cta: 'الترقية إلى Pro',
+                },
+            },
+            footnote: 'ابدأ مجاناً — بدون بطاقة. باقة Pro باقة شهرية ويمكن إلغاؤها في أي وقت.',
         },
         who: {
             eyebrow: 'لمن هذا المنتج',
@@ -342,7 +388,7 @@ export const LANDING_COPY = {
             items: [
                 {
                     q: 'هل المنيو الرقمي مجاني فعلاً؟',
-                    a: 'نعم. تقدر تنشئ منيوك الرقمي وكود QR مجاناً، بدون أي اشتراك تدفعه لاحقاً.',
+                    a: 'نعم. تقدر تنشئ منيوك الرقمي وكود QR مجاناً من باقة Free. وباقة Pro تضيف مطاعم أكثر وأصناف بلا حدود وتزيل الشعارات عندما تحتاج ذلك.',
                 },
                 {
                     q: 'هل يمكن أن تكون القائمة بعدة لغات؟',
@@ -369,11 +415,11 @@ export const LANDING_COPY = {
         final: {
             title: 'قائمتك جاهزة لعصر الـ QR.',
             text: 'أنشئ منيوك الرقمي، اعرضه بعدة لغات، وشاركه بكود QR واحد.',
-            note: 'مجاناً.',
+            note: 'ابدأ مجاناً.',
             cta: 'ابدأ منيو مجاناً',
         },
         footer: {
-            tagline: 'منيو إلكتروني مجاني وكود QR للمطاعم والمقاهي والمشاريع الغذائية.',
+            tagline: 'منيو إلكتروني وكود QR للمطاعم والمقاهي والمشاريع الغذائية.',
             product: 'المنتج',
             help: 'المساعدة',
             how: 'كيف يعمل',
@@ -386,13 +432,14 @@ export const LANDING_COPY = {
 
     fr: {
         meta: {
-            title: 'Menu digital gratuit avec QR code pour restaurants',
+            title: 'Menu digital avec QR code pour restaurants',
             description:
-                'Créez un menu digital gratuit pour votre restaurant ou café en arabe, anglais et français, puis partagez-le avec un seul QR code. Sans abonnement, sans application pour vos clients.',
+                'Créez un menu digital pour votre restaurant ou café en arabe, anglais et français, puis partagez-le avec un seul QR code. Une offre gratuite pour commencer — sans application pour vos clients.',
         },
         nav: {
             how: 'Comment ça marche',
             features: 'Fonctions',
+            pricing: 'Tarifs',
             faq: 'FAQ',
             cta: 'Créer un menu gratuit',
             menu: 'Menu',
@@ -400,14 +447,14 @@ export const LANDING_COPY = {
             language: 'Langue',
         },
         hero: {
-            badge: 'MENU DIGITAL GRATUIT POUR RESTAURANTS',
+            badge: 'MENUS DIGITAUX AVEC QR CODE',
             accent: 'Toutes les langues.',
             title: 'Un menu. Toutes les langues. Un QR code.',
             subtitle:
                 'Créez un menu digital professionnel pour votre restaurant ou café, proposez-le en arabe, anglais et français, et laissez vos clients l’ouvrir sur leur téléphone en scannant un seul QR code.',
             primary: 'Créer mon menu gratuit',
             secondary: 'Voir comment ça marche',
-            note: 'Entièrement gratuit. Sans abonnement. Vos clients n’installent aucune application.',
+            note: 'Commencez gratuitement. Évoluez seulement quand vous en avez besoin. Vos clients n’installent aucune application.',
         },
         features: {
             title: 'Trois choses, bien faites',
@@ -421,8 +468,8 @@ export const LANDING_COPY = {
                     text: 'Un code ouvre votre menu sur n’importe quel téléphone. Imprimez-le pour les tables, la caisse ou les tickets.',
                 },
                 {
-                    title: 'Gratuit, et ça le reste',
-                    text: 'Créez le menu, publiez-le, partagez le code. Aucun frais mensuels, aucun forfait payant.',
+                    title: 'Gratuit pour commencer',
+                    text: 'Créez le menu, publiez-le, partagez le code gratuitement. Passez à Pro quand votre activité grandit.',
                 },
             ],
         },
@@ -493,17 +540,39 @@ export const LANDING_COPY = {
             scanned: 'Menu ouvert',
             scanCaption: 'Scannez pour ouvrir le menu',
         },
-        free: {
+        pricing: {
             eyebrow: 'Tarifs',
-            title: 'Oui. C’est gratuit.',
-            text: 'Créez le menu numérique de votre restaurant et générez votre QR code sans payer d’abonnement.',
-            points: [
-                { title: 'Aucun frais mensuels', text: 'Rien à annuler, rien à renouveler.' },
-                { title: 'Rien à mettre en place', text: 'Ni designer, ni budget d’impression, ni agence.' },
-                { title: 'Tous les menus sont inclus', text: 'Ajoutez un autre menu ou une autre langue quand vous en avez besoin.' },
-            ],
-            cta: 'Créer mon menu gratuit',
-            footnote: 'C’est tout le produit : votre menu, vos langues, votre QR code. Gratuit.',
+            title: 'Gratuit pour commencer. Équitable à la croissance.',
+            subtitle: 'Un compte, un tableau de bord — des offres qui suivent le nombre de menus que vous gérez vraiment.',
+            cards: {
+                free: {
+                    name: 'Gratuit',
+                    price: 'Offre gratuite à vie',
+                    bullets: [
+                        '1 restaurant et 1 menu',
+                        'Jusqu’à 20 plats par menu',
+                        'Arabe, anglais et français',
+                        'QR code + cartes de table imprimables',
+                        'Logo SimpleMenu sur votre menu',
+                    ],
+                    cta: 'Créer mon menu gratuit',
+                },
+                pro: {
+                    name: 'Pro',
+                    price: '199 EGP / mois',
+                    badge: 'Le plus choisi',
+                    bullets: [
+                        'Jusqu’à 3 restaurants',
+                        'Plats illimités',
+                        'Arabe, anglais et français',
+                        'QR code + cartes de table imprimables',
+                        'Sans logo SimpleMenu',
+                        'Support prioritaire',
+                    ],
+                    cta: 'Passer à Pro',
+                },
+            },
+            footnote: 'Commencez gratuitement — sans carte bancaire. Pro est facturé mensuellement, annulable à tout moment.',
         },
         who: {
             eyebrow: 'Pour qui',
@@ -532,7 +601,7 @@ export const LANDING_COPY = {
             items: [
                 {
                     q: 'Le menu numérique est-il vraiment gratuit ?',
-                    a: 'Oui. Vous pouvez créer votre menu numérique et votre QR code gratuitement, sans abonnement à payer plus tard.',
+                    a: 'Oui. Vous pouvez créer votre menu numérique et votre QR code sur l’offre gratuite. Pro ajoute plus de restaurants, des plats illimités et retire le logo SimpleMenu quand vous en avez besoin.',
                 },
                 {
                     q: 'Mon menu peut-il proposer plusieurs langues ?',
@@ -559,11 +628,11 @@ export const LANDING_COPY = {
         final: {
             title: 'Votre Menu Est Prêt pour l’Ère du QR.',
             text: 'Créez votre menu numérique, proposez-le en plusieurs langues et partagez-le avec un seul QR code.',
-            note: 'C’est gratuit.',
+            note: 'Commencez gratuitement.',
             cta: 'Créer mon menu gratuit',
         },
         footer: {
-            tagline: 'Un menu numérique et un QR code gratuits pour restaurants, cafés et métiers de la restauration.',
+            tagline: 'Un menu digital et un QR code pour restaurants, cafés et métiers de la restauration.',
             product: 'Produit',
             help: 'Aide',
             how: 'Comment ça marche',

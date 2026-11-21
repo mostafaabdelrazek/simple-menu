@@ -1,11 +1,13 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import { LayoutDashboard, LogOut, MenuSquare, Store, Users, UtensilsCrossed } from 'lucide-react';
+import { CreditCard, LayoutDashboard, LogOut, MenuSquare, Store, Users, UtensilsCrossed } from 'lucide-react';
+import FlashMessage from './FlashMessage';
 
 const NAV = [
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
     { href: '/admin/users', label: 'Users', icon: Users },
     { href: '/admin/restaurants', label: 'Restaurants', icon: Store },
     { href: '/admin/menus', label: 'Menus', icon: MenuSquare },
+    { href: '/admin/subscriptions', label: 'Subscriptions', icon: CreditCard },
 ];
 
 export default function AdminLayout({ children, title }) {
@@ -68,6 +70,7 @@ export default function AdminLayout({ children, title }) {
             </aside>
 
             <main className="ml-60 min-h-screen flex-1 px-8 py-8">
+                <FlashMessage />
                 {title && <h1 className="mb-6 text-2xl font-bold text-stone-900">{title}</h1>}
                 {children}
             </main>

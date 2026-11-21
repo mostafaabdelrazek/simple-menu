@@ -1,15 +1,29 @@
 import { Head } from '@inertiajs/react';
 import AdminLayout from '../../components/AdminLayout';
 import Pagination from '../../components/Pagination';
+import AdminRowActions from '../../components/AdminRowActions';
 import { Search } from 'lucide-react';
 import { router } from '@inertiajs/react';
+import { useI18n } from '../../lib/i18n';
 
 export default function AdminRestaurants({ restaurants }) {
+    const { t } = useI18n();
+
     function search(e) {
         e.preventDefault();
         const value = new FormData(e.target).get('search');
 
         router.get('/admin/restaurants', { search: value || undefined }, { preserveState: true, replace: true });
+    }
+
+    function statusBadge(suspended) {
+        return suspended ? (
+            <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600">
+                {t('admin.moderation.suspended_badge')}
+            </span>
+        ) : (
+            <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">Active</span>
+        );
     }
 
     return (
@@ -36,8 +50,11 @@ export default function AdminRestaurants({ restaurants }) {
                         <tr>
                             <th className="px-4 py-3">Restaurant</th>
                             <th className="px-4 py-3">Owner</th>
+                            <th className="px-4 py-3">{t('admin.moderation.plan')}</th>
+                            <th className="px-4 py-3">Status</th>
                             <th className="px-4 py-3">Created</th>
                             <th className="px-4 py-3">Public link</th>
+                            <th className="px-4 py-3">{t('admin.mod_actions')}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100">
@@ -45,17 +62,29 @@ export default function AdminRestaurants({ restaurants }) {
                             <tr key={restaurant.id}>
                                 <td className="px-4 py-3 font-medium text-stone-900">{restaurant.name}</td>
                                 <td className="px-4 py-3 text-stone-600">{restaurant.owner}</td>
+                                <td className="px-4 py-3 text-stone-600">{restaurant.owner_plan}</td>
+                                <td className="px-4 py-3">{statusBadge(restaurant.suspended)}</td>
                                 <td className="px-4 py-3 text-stone-600">{new Date(restaurant.created_at).toLocaleDateString()}</td>
                                 <td className="px-4 py-3">
                                     <a href={restaurant.url} target="_blank" rel="noopener noreferrer" className="font-medium text-amber-600 hover:text-amber-700">
                                         View →
                                     </a>
                                 </td>
+                                <td className="px-4 py-3">
+                                    <AdminRowActions
+                                        suspended={restaurant.suspended}
+                                        endpoints={{
+                                            suspend: `/admin/restaurants/${restaurant.id}/suspend`,
+                                            restore: `/admin/restaurants/${restaurant.id}/restore`,
+                                            destroy: `/admin/restaurants/${restaurant.id}`,
+                                        }}
+                                    />
+                                </td>
                             </tr>
                         ))}
                         {restaurants.data.length === 0 && (
                             <tr>
-                                <td colSpan={4} className="px-4 py-10 text-center text-stone-400">
+                                <td colSpan={7} className="px-4 py-10 text-center text-stone-400">
                                     No restaurants found.
                                 </td>
                             </tr>

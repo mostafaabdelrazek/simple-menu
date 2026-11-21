@@ -15,11 +15,23 @@ class DemoLoginController extends Controller
     {
         abort_if(! $this->isEnabled(), 404, 'Demo login is not enabled in this environment.');
 
-        $user = User::query()->where('email', Config::get('app.demo_user_email'))->first()
-            ?? User::query()->whereNotNull('phone_verified_at')->first()
-            ?? User::first();
+        // When a specific user is selected (from the login-page selector),
+        // log in as that user. Otherwise fall back to the first demo user
+        // available — keeps the endpoint working for simple POSTs.
+        $userId = $request->integer('user_id');
 
-        abort_unless($user !== null, 500, 'No user found for demo login. Run: php artisan db:seed');
+        if ($userId) {
+            $user = User::query()->findOrFail($userId);
+        } else {
+            $user = User::query()->where('email', 'like', '%demo%')
+                ->orWhere('email', 'like', '%@simplemenu.test')
+                ->whereNotNull('phone_verified_at')
+                ->first()
+                ?? User::query()->whereNotNull('phone_verified_at')->first()
+                ?? User::first();
+
+            abort_unless($user !== null, 500, 'No user found for demo login. Run: php artisan db:seed');
+        }
 
         Auth::guard('web')->login($user);
         $request->session()->regenerate();

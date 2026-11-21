@@ -3,7 +3,7 @@ import ExampleMenu from '../components/landing/ExampleMenu';
 import Faq from '../components/landing/Faq';
 import FeatureStrip from '../components/landing/FeatureStrip';
 import FinalCta from '../components/landing/FinalCta';
-import FreeSection from '../components/landing/FreeSection';
+import PricingSection from '../components/landing/PricingSection';
 import Hero from '../components/landing/Hero';
 import HowItWorks from '../components/landing/HowItWorks';
 import LanguageShowcase from '../components/landing/LanguageShowcase';
@@ -78,7 +78,7 @@ export default function Home({ locale = 'en', cta_url: ctaUrl, languages, exampl
                 <HowItWorks copy={copy} ctaUrl={ctaUrl} rtl={rtl} />
                 <LanguageShowcase copy={copy} locale={resolved} />
                 <QrSection copy={copy} exampleUrl={exampleUrl} />
-                <FreeSection copy={copy} ctaUrl={ctaUrl} rtl={rtl} />
+                <PricingSection copy={copy} ctaUrl={ctaUrl} rtl={rtl} />
                 <WhoSection copy={copy} />
                 <ExampleMenu copy={copy} exampleUrl={exampleUrl} locale={resolved} rtl={rtl} />
                 <Faq copy={copy} />

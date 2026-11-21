@@ -10,6 +10,7 @@ export default function LandingNav({ copy, ctaUrl, locale, languages, rtl }) {
     const links = [
         { href: '#how-it-works', label: copy.nav.how },
         { href: '#features', label: copy.nav.features },
+        { href: '#pricing', label: copy.nav.pricing },
         { href: '#faq', label: copy.nav.faq },
     ];
 

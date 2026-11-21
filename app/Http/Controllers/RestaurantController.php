@@ -7,38 +7,78 @@ use App\Models\Menu;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Models\Restaurant;
+use App\Models\User;
+use App\Services\Billing\BillingManager;
+use App\Support\PublicPageCache;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class RestaurantController extends Controller
 {
-    public function create(): Response
+    /**
+     * Returns the wizard page, or an Inertia "location" (409 + X-Inertia-Location)
+     * response when the account is at its plan limit, so the client does a
+     * full page visit to billing.
+     */
+    public function create(): Response|SymfonyResponse
     {
+        // Send accounts that maxed out their plan straight to billing before
+        // they fill in the whole wizard just to be stopped at submit.
+        if (BillingManager::restaurantsLeft(Auth::guard('web')->user()) === 0) {
+            return Inertia::location(route('billing', ['limit' => 1]));
+        }
+
         return Inertia::render('Restaurant/Wizard', $this->wizardProps());
     }
 
     public function store(StoreRestaurantRequest $request): RedirectResponse
     {
+        $user = Auth::guard('web')->user();
+
         $data = $request->validated();
 
-        $restaurant = DB::transaction(function () use ($data) {
-            $restaurant = $this->createRestaurant($data);
+        $itemLimit = BillingManager::itemLimit($user);
+
+        if ($itemLimit !== null && BillingManager::countItems($data['categories']) > $itemLimit) {
+            return back()->withInput()->with('error', __('billing.item_limit_reached', ['limit' => $itemLimit]));
+        }
+
+        $result = DB::transaction(function () use ($data, $user) {
+            // Lock the user row so concurrent requests can't both pass the
+            // plan limit check and create restaurants over the limit.
+            $lockedUser = User::query()->where('id', $user->id)->lockForUpdate()->first();
+
+            if (BillingManager::restaurantsLeft($lockedUser) === 0) {
+                return redirect()->route('billing')->with('error', __('billing.restaurant_limit_reached'));
+            }
+
+            $restaurant = $this->createRestaurant($data, $lockedUser);
 
             $this->createMenuData($restaurant, $data);
 
             return $restaurant;
         });
 
+        if ($result instanceof RedirectResponse) {
+            return $result;
+        }
+
+        /** @var Restaurant $restaurant */
+        $restaurant = $result;
+
+        PublicPageCache::forgetRestaurantWithMenus($restaurant);
+
         return redirect()->route('restaurants.complete', $restaurant->slug);
     }
 
     public function edit(Restaurant $restaurant): Response
     {
-        abort_if(! $restaurant->isOwnedBy(Auth::guard('web')->user()), 403);
+        $this->authorize('update', $restaurant);
 
         $restaurant->load(['translations', 'menus.categories.items.translations', 'menus.categories.translations']);
 
@@ -103,9 +143,17 @@ class RestaurantController extends Controller
 
     public function update(StoreRestaurantRequest $request, Restaurant $restaurant): RedirectResponse
     {
-        abort_if(! $restaurant->isOwnedBy(Auth::guard('web')->user()), 403);
+        $this->authorize('update', $restaurant);
+
+        $user = Auth::guard('web')->user();
 
         $data = $request->validated();
+
+        $itemLimit = BillingManager::itemLimit($user);
+
+        if ($itemLimit !== null && BillingManager::countItems($data['categories']) > $itemLimit) {
+            return back()->withInput()->with('error', __('billing.item_limit_reached', ['limit' => $itemLimit]));
+        }
 
         DB::transaction(function () use ($restaurant, $data) {
             $restaurant->update([
@@ -146,6 +194,8 @@ class RestaurantController extends Controller
             $this->createCategories($menu, $data['categories']);
         });
 
+        PublicPageCache::forgetRestaurantWithMenus($restaurant);
+
         return redirect()->route('restaurants.complete', $restaurant->slug)
             ->with('success', __('flash.updated'));
     }
@@ -168,10 +218,10 @@ class RestaurantController extends Controller
     /**
      * @param  array<string, mixed>  $data
      */
-    private function createRestaurant(array $data): Restaurant
+    private function createRestaurant(array $data, $user): Restaurant
     {
         return Restaurant::create([
-            'user_id' => Auth::guard('web')->id(),
+            'user_id' => $user->id,
             'slug' => $this->uniqueSlug(Restaurant::class, $this->baseSlug($data['restaurant']['translations'])),
             'latitude' => $data['restaurant']['latitude'] ?? null,
             'longitude' => $data['restaurant']['longitude'] ?? null,
@@ -288,7 +338,7 @@ class RestaurantController extends Controller
 
     public function complete(Restaurant $restaurant): Response
     {
-        abort_if(! $restaurant->isOwnedBy(Auth::guard('web')->user()), 403);
+        $this->authorize('update', $restaurant);
 
         $menu = $restaurant->menus()->first();
 

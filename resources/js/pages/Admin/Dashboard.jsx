@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { MenuSquare, Store, User, Users } from 'lucide-react';
+import { AlertTriangle, Crown, MenuSquare, Store, User, Users } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 
 export default function AdminDashboard({ stats }) {
@@ -8,6 +8,10 @@ export default function AdminDashboard({ stats }) {
         { label: 'Users', value: stats.users, icon: Users },
         { label: 'Restaurants', value: stats.restaurants, icon: Store },
         { label: 'Menus', value: stats.menus, icon: MenuSquare },
+        { label: 'Active subscriptions', value: stats.subscriptions.active, icon: Crown },
+        { label: 'Trials', value: stats.subscriptions.trials, icon: Crown },
+        { label: 'Suspended accounts', value: stats.suspended_users, icon: AlertTriangle },
+        { label: 'Suspended restaurants', value: stats.suspended_restaurants, icon: AlertTriangle },
     ];
 
     return (
@@ -19,7 +23,7 @@ export default function AdminDashboard({ stats }) {
                     <div key={card.label} className="rounded-2xl border border-stone-200 bg-white p-5">
                         <div className="flex items-center justify-between">
                             <span className="text-sm text-stone-500">{card.label}</span>
-                            <card.icon className="h-5 w-5 text-stone-400" />
+                            <card.icon className={`h-5 w-5 ${card.icon === AlertTriangle ? 'text-red-400' : 'text-stone-400'}`} />
                         </div>
                         <p className="mt-2 text-3xl font-bold text-stone-900">{card.value}</p>
                     </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsurePhoneIsVerified;
+use App\Http\Middleware\EnsureUserNotSuspended;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SetAppLocale;
 use Illuminate\Foundation\Application;
@@ -20,10 +21,17 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
         ]);
 
+        // Paymob posts the transaction webhook directly, without a session or
+        // CSRF token — exempt it, the HMAC verification is the real gate.
+        $middleware->validateCsrfTokens(except: [
+            'billing/paymob/webhook',
+        ]);
+
         $middleware->encryptCookies(except: ['simplemenu_lang']);
 
         $middleware->alias([
             'ensure.phone.verified' => EnsurePhoneIsVerified::class,
+            'ensure.not.suspended' => EnsureUserNotSuspended::class,
         ]);
 
         $middleware->redirectGuestsTo(function (Request $request) {

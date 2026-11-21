@@ -35,6 +35,11 @@ export default function LandingFooter({ copy, locale, languages }) {
                                 </a>
                             </li>
                             <li>
+                                <a href="#pricing" className="text-sm text-stone-600 transition hover:text-stone-900">
+                                    {copy.nav.pricing}
+                                </a>
+                            </li>
+                            <li>
                                 <a href="#faq" className="text-sm text-stone-600 transition hover:text-stone-900">
                                     {copy.footer.faq}
                                 </a>

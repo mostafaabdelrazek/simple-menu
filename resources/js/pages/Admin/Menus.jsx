@@ -1,9 +1,13 @@
 import { Head, router } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
+import AdminRowActions from '../../components/AdminRowActions';
 import Pagination from '../../components/Pagination';
+import { useI18n } from '../../lib/i18n';
 
 export default function AdminMenus({ menus }) {
+    const { t } = useI18n();
+
     function search(e) {
         e.preventDefault();
         const value = new FormData(e.target).get('search');
@@ -38,6 +42,7 @@ export default function AdminMenus({ menus }) {
                             <th className="px-4 py-3">Currency</th>
                             <th className="px-4 py-3">Languages</th>
                             <th className="px-4 py-3">Public link</th>
+                            <th className="px-4 py-3">{t('admin.mod_actions')}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100">
@@ -52,11 +57,24 @@ export default function AdminMenus({ menus }) {
                                         View →
                                     </a>
                                 </td>
+                                <td className="px-4 py-3">
+                                    {menu.suspended ? (
+                                        <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600">
+                                            {t('admin.moderation.suspended_badge')}
+                                        </span>
+                                    ) : (
+                                        <AdminRowActions
+                                            endpoints={{
+                                                destroy: `/admin/menus/${menu.id}`,
+                                            }}
+                                        />
+                                    )}
+                                </td>
                             </tr>
                         ))}
                         {menus.data.length === 0 && (
                             <tr>
-                                <td colSpan={5} className="px-4 py-10 text-center text-stone-400">
+                                <td colSpan={6} className="px-4 py-10 text-center text-stone-400">
                                     No menus found.
                                 </td>
                             </tr>

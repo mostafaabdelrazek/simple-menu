@@ -1,7 +1,9 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
+import AdminRowActions from '../../components/AdminRowActions';
 import Pagination from '../../components/Pagination';
+import { useI18n } from '../../lib/i18n';
 
 function SearchInput({ placeholder }) {
     const { url } = usePage();
@@ -35,6 +37,8 @@ function SearchInput({ placeholder }) {
 }
 
 export default function AdminUsers({ users }) {
+    const { t } = useI18n();
+
     return (
         <AdminLayout title="Users">
             <Head title="Users" />
@@ -47,7 +51,9 @@ export default function AdminUsers({ users }) {
                             <th className="px-4 py-3">Name</th>
                             <th className="px-4 py-3">Email</th>
                             <th className="px-4 py-3">Phone</th>
-                            <th className="px-4 py-3">Joined</th>
+                            <th className="px-4 py-3">{t('admin.moderation.plan')}</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">{t('admin.mod_actions')}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100">
@@ -57,18 +63,40 @@ export default function AdminUsers({ users }) {
                                     <span className="flex items-center gap-2">
                                         {user.avatar && <img src={user.avatar} alt="" className="h-7 w-7 rounded-full" referrerPolicy="no-referrer" />}
                                         {user.name}
+                                        <span className="rounded bg-stone-100 px-1.5 text-xs text-stone-500">
+                                            {user.restaurants_count}
+                                        </span>
                                     </span>
                                 </td>
                                 <td className="px-4 py-3 text-stone-600">{user.email}</td>
                                 <td className="px-4 py-3 text-stone-600">
                                     {user.country_code ? `${user.country_code} ${user.phone ?? ''}` : '—'}
                                 </td>
-                                <td className="px-4 py-3 text-stone-600">{new Date(user.created_at).toLocaleDateString()}</td>
+                                <td className="px-4 py-3 text-stone-600">{user.plan}</td>
+                                <td className="px-4 py-3">
+                                    {user.suspended ? (
+                                        <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600">
+                                            {t('admin.moderation.suspended_badge')}
+                                        </span>
+                                    ) : (
+                                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">Active</span>
+                                    )}
+                                </td>
+                                <td className="px-4 py-3">
+                                    <AdminRowActions
+                                        suspended={user.suspended}
+                                        endpoints={{
+                                            suspend: `/admin/users/${user.id}/suspend`,
+                                            restore: `/admin/users/${user.id}/restore`,
+                                            destroy: `/admin/users/${user.id}`,
+                                        }}
+                                    />
+                                </td>
                             </tr>
                         ))}
                         {users.data.length === 0 && (
                             <tr>
-                                <td colSpan={4} className="px-4 py-10 text-center text-stone-400">
+                                <td colSpan={6} className="px-4 py-10 text-center text-stone-400">
                                     No users found.
                                 </td>
                             </tr>

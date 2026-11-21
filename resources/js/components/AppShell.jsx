@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
-import { LogOut, UtensilsCrossed } from 'lucide-react';
+import { Crown, LogOut, UtensilsCrossed } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 import { rememberLocale } from '../lib/locale';
 
@@ -18,8 +19,7 @@ function AppLocaleSwitcher() {
             className="inline-flex items-center rounded-md border border-stone-200 bg-white p-0.5"
             role="group"
             aria-label={t('app.language')}
-        >
-            {supportedLocales.map((code) => (
+        >            {supportedLocales.map((code) => (
                 <button
                     key={code}
                     type="button"
@@ -60,6 +60,14 @@ export default function AppShell({ children }) {
                     </Link>
 
                     <div className="flex items-center gap-2 sm:gap-3">
+                        <Link
+                            href="/billing"
+                            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-stone-600 transition hover:bg-amber-50 hover:text-amber-700"
+                        >
+                            <Crown className="h-4 w-4" />
+                            <span className="hidden sm:inline">{t('billing.title')}</span>
+                        </Link>
+
                         <AppLocaleSwitcher />
 
                         {user?.avatar ? (

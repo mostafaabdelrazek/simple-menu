@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Billing\BillingManager;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,6 +36,11 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard/Index', [
             'restaurants' => $restaurants,
+            'plan' => BillingManager::currentPlanSlug($user),
+            'plan_details' => BillingManager::publicPlan(BillingManager::currentPlanSlug($user)),
+            'restaurants_limit' => BillingManager::restaurantLimit($user),
+            'restaurants_used' => $user->restaurants()->count(),
+            'branding_shown' => BillingManager::showsBranding($user),
         ]);
     }
 }
