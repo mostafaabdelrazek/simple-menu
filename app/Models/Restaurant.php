@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['user_id', 'slug', 'latitude', 'longitude', 'maps_url', 'address', 'banner', 'logo', 'social_links'])]
+#[Fillable(['user_id', 'slug', 'latitude', 'longitude', 'maps_url', 'address', 'banner', 'logo', 'social_links', 'suspended_at'])]
 class Restaurant extends Model
 {
     /** @use HasFactory<RestaurantFactory> */
@@ -45,12 +45,18 @@ class Restaurant extends Model
         return $this->user_id === $user->id;
     }
 
+    public function isSuspended(): bool
+    {
+        return $this->suspended_at !== null;
+    }
+
     protected function casts(): array
     {
         return [
             'latitude' => 'decimal:7',
             'longitude' => 'decimal:7',
             'social_links' => 'array',
+            'suspended_at' => 'datetime',
         ];
     }
 }

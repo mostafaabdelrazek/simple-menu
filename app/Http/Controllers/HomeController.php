@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Billing\BillingManager;
 use App\Support\LocaleResolver;
+use App\Support\Seo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
@@ -16,11 +18,18 @@ class HomeController extends Controller
 
         App::setLocale($locale);
 
+        // The server-rendered head needs its own meta even though the SPA
+        // re-renders a richer head client-side once React takes over.
+        Seo::share($request, __('landing.meta_title'), __('landing.meta_description'), [
+            'jsonld' => [$this->webApplicationSchema()],
+        ]);
+
         return Inertia::render('Home', [
             'locale' => $locale,
             'languages' => $this->languages(),
             'cta_url' => $this->ctaUrl($request),
             'example_menu_url' => url('/m/menu-golden-cairo-grill'),
+            'plans' => BillingManager::publicPlans(),
         ]);
     }
 
@@ -46,5 +55,18 @@ class HomeController extends Controller
         return $request->user()->restaurants()->exists()
             ? route('dashboard')
             : route('restaurants.create');
+    }
+
+    private function webApplicationSchema(): array
+    {
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebApplication',
+            'name' => config('app.name', 'SimpleMenu'),
+            'url' => url('/'),
+            'applicationCategory' => 'BusinessApplication',
+            'operatingSystem' => 'Any',
+            'inLanguage' => config('app.supported_locales', ['ar', 'en', 'fr']),
+        ];
     }
 }

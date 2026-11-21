@@ -12,6 +12,8 @@
         "deploying-to-cloud",
         "laravel-best-practices",
         "testing-best-practices",
+        "socialite-development",
+        "inertia-react-development",
         "tailwindcss-development"
     ]
 }

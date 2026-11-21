@@ -1,18 +1,45 @@
 import { Head, Link } from '@inertiajs/react';
-import { ExternalLink, Pencil, Plus, Store } from 'lucide-react';
+import { ExternalLink, Pencil, Plus, Store, Crown } from 'lucide-react';
 import AppShell from '../../components/AppShell';
 import FlashMessage from '../../components/FlashMessage';
 import CopyButton from '../../components/CopyButton';
 import QrDownloadButton from '../../components/QrDownloadButton';
 import { useI18n } from '../../lib/i18n';
 
-export default function Dashboard({ restaurants }) {
+export default function Dashboard({ restaurants, plan, restaurants_used: used, restaurants_limit: limit }) {
     const { t } = useI18n();
+    const atLimit = limit !== null && used >= limit;
 
     return (
         <AppShell>
             <Head title={t('dashboard.title')} />
             <FlashMessage />
+
+            <div className={`mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 ${
+                atLimit || plan !== 'pro' ? 'border-amber-300 bg-amber-50' : 'border-stone-200 bg-white'
+            }`}>
+                <div className="flex items-center gap-3">
+                    <Crown className={`h-5 w-5 shrink-0 ${plan === 'pro' ? 'text-amber-500' : 'text-stone-400'}`} />
+                    <div>
+                        <p className="text-sm font-semibold text-stone-900">
+                            {plan === 'pro'
+                                ? t('billing.current_plan') + ' · Pro'
+                                : t('billing.current_plan') + ' · Free'}
+                        </p>
+                        <p className="text-xs text-stone-600">
+                            {limit === null
+                                ? t('billing.restaurants_no_limit', { count: used })
+                                : t('billing.restaurants', { count: used, limit })}
+                        </p>
+                    </div>
+                </div>
+                <Link
+                    href="/billing"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:border-amber-400 hover:text-amber-700"
+                >
+                    {plan === 'pro' ? t('billing.change_cta') : t('billing.view_pricing')}
+                </Link>
+            </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>

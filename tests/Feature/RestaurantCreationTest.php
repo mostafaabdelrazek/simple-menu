@@ -10,6 +10,7 @@ use App\Models\Restaurant;
 use App\Models\RestaurantTranslation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Inertia;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -35,6 +36,27 @@ class RestaurantCreationTest extends TestCase
                 ->component('Restaurant/Wizard')
                 ->has('supported_locales', 3)
                 ->has('default_social_links'));
+    }
+
+    public function test_wizard_sends_users_at_their_plan_limit_to_billing(): void
+    {
+        // Free plan allows exactly one restaurant; owning one leaves zero.
+        $user = User::factory()->phoneVerified()->create();
+        Restaurant::factory()->create(['user_id' => $user->id]);
+
+        // A normal (non-Inertia) visit performs a regular redirect to billing…
+        $this->actingAs($user)->get(route('restaurants.create'))
+            ->assertRedirect(route('billing', ['limit' => 1]));
+
+        // …while an Inertia visit asks the client to cross-visit to a fresh
+        // page load via a 409 + X-Inertia-Location response. The visit must
+        // carry the current asset version, or the Inertia middleware errors
+        // the client into a version collision first.
+        $this->actingAs($user)
+            ->withHeaders(['X-Inertia' => 'true', 'X-Inertia-Version' => Inertia::getVersion()])
+            ->get(route('restaurants.create'))
+            ->assertStatus(409)
+            ->assertHeader('X-Inertia-Location', route('billing', ['limit' => 1]));
     }
 
     public function test_full_wizard_payload_creates_restaurant_and_menu(): void

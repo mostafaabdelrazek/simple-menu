@@ -24,7 +24,7 @@ function discountPercent(price, discountPrice) {
     return Math.round((1 - discounted / original) * 100);
 }
 
-export default function Menu({ locale, ui_locale: uiLocale = 'en', languages, restaurant, menu, theme }) {
+export default function Menu({ locale, ui_locale: uiLocale = 'en', languages, restaurant, menu, theme, branding = true }) {
     // `locale` is the language the menu itself is written in; `ui_locale` is the
     // language the visitor asked for, and it owns the writing direction.
     const rtl = uiLocale === 'ar';
@@ -244,10 +244,12 @@ export default function Menu({ locale, ui_locale: uiLocale = 'en', languages, re
                     >
                         {t('public.visit', { name: restaurant.name })}
                     </a>
-                    <p className="mt-1">
-                        {t('public.powered_by')}{' '}
-                        <span className="text-[var(--menu-muted)]">SimpleMenu</span>
-                    </p>
+                    {branding && (
+                        <p className="mt-1">
+                            {t('public.powered_by')}{' '}
+                            <span className="text-[var(--menu-muted)]">SimpleMenu</span>
+                        </p>
+                    )}
                 </footer>
             </main>
 
